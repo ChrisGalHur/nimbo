@@ -1,0 +1,218 @@
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0A0F1C; --panel:#10182B; --ink:#EAF2FF; --ink-soft:#7C8CB3; --line:#1E2B45;
+    --cyan:#5CE1E6; --blue:#5C86FF; --good:#5FE3A3; --warn:#FFC163; --bad:#FF6B6B;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; font-size:14px; padding:32px; }
+  .wrap{ max-width:600px; margin:0 auto; }
+
+  .topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:32px; }
+  .brand{ display:flex; align-items:center; gap:9px; }
+  .brand-word{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; letter-spacing:0.1em; }
+  .brand-word .accent{ color:var(--cyan); text-shadow:0 0 4px rgba(92,225,230,0.5); }
+
+  .theme-toggle{
+    width:34px; height:34px; border-radius:9px; border:1px solid var(--line);
+    background:var(--panel); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:var(--ink-soft);
+  }
+
+  .score-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:26px 28px; display:flex; align-items:center; gap:18px; margin-bottom:14px;
+  }
+  .ring-num{ font-family:'IBM Plex Mono',monospace; font-size:28px; font-weight:600;
+    text-shadow:0 0 5px rgba(92,225,230,0.6), 0 0 18px rgba(92,134,255,0.4); }
+  .score-status{ font-size:14px; font-weight:700; color:var(--cyan); }
+  .score-label{ font-size:12px; color:var(--ink-soft); }
+
+  .diagnosis{ font-size:15px; line-height:1.65; color:var(--ink); margin:0 0 22px; }
+  .diagnosis b{ color:var(--cyan); font-weight:700; }
+
+  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 24px; margin-bottom:16px; }
+  .panel h3{ font-size:13px; font-weight:700; margin:0 0 12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em; }
+  table{ width:100%; border-collapse:collapse; }
+  td{ padding:8px 0; font-size:13px; border-top:1px solid var(--line); }
+  td.num{ text-align:right; font-family:'IBM Plex Mono',monospace; }
+  .status-dot{ width:7px;height:7px;border-radius:50%; display:inline-block; margin-right:7px; }
+
+  .upsell{
+    background:linear-gradient(135deg, rgba(92,225,230,0.08), rgba(92,134,255,0.08));
+    border:1px solid var(--line); border-radius:14px; padding:24px 26px; margin-bottom:16px;
+  }
+  .upsell h3{ font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:600; margin:0 0 10px; }
+  .upsell p{ font-size:13.5px; color:var(--ink-soft); line-height:1.55; margin:0 0 16px; }
+  .upsell ul{ margin:0 0 20px; padding-left:0; list-style:none; }
+  .upsell li{ font-size:13.5px; padding:7px 0; display:flex; gap:8px; }
+  .upsell li::before{ content:"✓"; color:var(--good); font-weight:700; }
+
+  .cta{
+    display:block; width:100%; background:var(--cyan); color:#0A0F1C; border:none; border-radius:12px;
+    padding:15px; font-size:15px; font-weight:700; font-family:'Inter',sans-serif; cursor:pointer;
+    text-align:center; text-decoration:none; box-shadow:0 0 24px rgba(92,225,230,0.35);
+  }
+  .cta-note{ text-align:center; font-size:12px; color:var(--ink-soft); margin-top:10px; }
+
+  .code-wrap{ margin-top:18px; text-align:center; }
+  .code-label{ font-size:11.5px; color:var(--ink-soft); opacity:0.7; margin-bottom:6px; }
+  .code-row{ display:flex; gap:8px; max-width:260px; margin:0 auto; }
+  .code-input{
+    flex:1; background:transparent; border:1px solid var(--line); border-radius:8px;
+    padding:8px 11px; color:var(--ink); font-size:13px; font-family:'Inter',sans-serif; outline:none;
+  }
+  .code-input::placeholder{ color:var(--ink-soft); opacity:0.6; }
+  .code-input:focus{ border-color:var(--cyan); }
+  .code-btn{
+    background:transparent; border:1px solid var(--line); border-radius:8px;
+    padding:8px 12px; color:var(--ink-soft); font-size:12px; cursor:pointer; white-space:nowrap;
+  }
+  .code-btn:hover{ border-color:var(--cyan); color:var(--cyan); }
+
+  .loading{ color:var(--ink-soft); font-size:13px; }
+</style>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 64 64">
+        <defs>
+          <filter id="g" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle cx="32" cy="32" r="10" fill="none" stroke="#5CE1E6" stroke-width="2.6" filter="url(#g)"/>
+        <circle cx="32" cy="32" r="18" fill="none" stroke="#5C86FF" stroke-width="2" filter="url(#g)" opacity="0.85"/>
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#5C86FF" stroke-width="1.4" filter="url(#g)" opacity="0.45"/>
+      </svg>
+      <span class="brand-word">NIM<span class="accent">B</span>O</span>
+    </div>
+    <div class="theme-toggle" title="Modo claro / oscuro (aún no funcional)">☀︎</div>
+  </div>
+
+  <div id="contenido">
+    <p class="loading">Cargando tus datos...</p>
+  </div>
+</div>
+
+<script>
+  var data = <?!= JSON.stringify(data) ?>;
+
+  function colorEscala(score) {
+    var stops = [
+      { p: 0,   c: [255, 107, 107] },
+      { p: 50,  c: [255, 193, 99]  },
+      { p: 100, c: [95, 227, 163]  }
+    ];
+    var i = score <= 50 ? 0 : 1;
+    var a = stops[i], b = stops[i + 1];
+    var t = (score - a.p) / (b.p - a.p);
+    var r = Math.round(a.c[0] + (b.c[0] - a.c[0]) * t);
+    var g = Math.round(a.c[1] + (b.c[1] - a.c[1]) * t);
+    var bl = Math.round(a.c[2] + (b.c[2] - a.c[2]) * t);
+    return 'rgb(' + r + ',' + g + ',' + bl + ')';
+  }
+
+  function estado(score) {
+    var texto = score >= 75 ? 'Bien' : score >= 50 ? 'Mejorable' : 'Insuficiente';
+    return { texto: texto, color: colorEscala(score) };
+  }
+
+  // Solo se eligen como punto débil las áreas que no son el sueldo
+  var mensajes = {
+    ScoreGastos:    'tus <b>gastos</b> están restando más margen del necesario',
+    ScoreAhorro:    'tu <b>ahorro</b> todavía no es constante mes a mes',
+    ScoreInversion: 'apenas estás empezando a <b>invertir</b>, y ahí se concentra la mayor oportunidad',
+    ScoreEmergencia:'tu <b>fondo de emergencia</b> todavía no cubre un imprevisto serio',
+    ScoreDeudas:    'tus <b>deudas</b> están limitando lo que puedes destinar a construir patrimonio'
+  };
+
+  function areaMasDebil(d) {
+    var claves = Object.keys(mensajes);
+    var peor = claves[0];
+    claves.forEach(function(k) {
+      if (d[k] < d[peor]) peor = k;
+    });
+    return peor;
+  }
+
+  function render(d) {
+    if (!d) {
+      document.getElementById('contenido').innerHTML = '<p class="loading">No hemos encontrado ese resultado. Vuelve a hacer el test.</p>';
+      return;
+    }
+
+    var peor = areaMasDebil(d);
+    var e = estado(d.ScoreTotal);
+
+    var intro = '';
+    if (d.ScoreTotal >= 75) {
+      intro = 'Tu economía tiene una base sólida. ';
+    } else if (d.ScoreTotal >= 50) {
+      intro = 'Tu economía va razonablemente bien. ';
+    } else {
+      intro = 'Hay varios puntos que se pueden mejorar con claridad. ';
+    }
+
+    // Ingresos NO se muestra (solo se usa internamente para cálculos)
+    var areas = [
+      ['Gastos', d.ScoreGastos],
+      ['Ahorro', d.ScoreAhorro],
+      ['Inversión', d.ScoreInversion],
+      ['Fondo de emergencia', d.ScoreEmergencia],
+      ['Deudas', d.ScoreDeudas]
+    ];
+
+    var filas = areas.map(function(a) {
+      var es = estado(a[1]);
+      return '<tr><td><span class="status-dot" style="background:' + es.color + '"></span>' + a[0] + '</td>' +
+             '<td class="num" style="color:' + es.color + '">' + a[1] + '</td></tr>';
+    }).join('');
+
+    document.getElementById('contenido').innerHTML =
+      '<div class="score-card">' +
+        '<span class="ring-num">' + d.ScoreTotal + '</span>' +
+        '<div>' +
+          '<div class="score-status">' + e.texto + '</div>' +
+          '<div class="score-label">de 100 puntos</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<p class="diagnosis">' + intro +
+        mensajes[peor] + '. ' +
+        'Con un plan concreto y seguimiento semanal, esto se corrige en pocos meses — no con fuerza de voluntad, sino con estructura.</p>' +
+
+      '<div class="panel"><h3>Tu desglose completo</h3><table>' + filas + '</table></div>' +
+
+      '<div class="upsell">' +
+        '<h3>Lo que Nimbo haría por ti</h3>' +
+        '<p>Un plan personalizado a partir de tu resultado, con un movimiento concreto cada semana y seguimiento de tu progreso mes a mes.</p>' +
+        '<ul>' +
+          '<li>Plan de acción enfocado en tu punto más débil</li>' +
+          '<li>Un movimiento financiero concreto cada semana</li>' +
+          '<li>Seguimiento claro de tu evolución</li>' +
+        '</ul>' +
+        '<a href="#" class="cta">Empezar mi plan →</a>' +
+        '<div class="cta-note">9.99 € al año</div>' +
+
+        '<div class="code-wrap">' +
+          '<div class="code-label">¿Tienes un código?</div>' +
+          '<div class="code-row">' +
+            '<input class="code-input" type="text" placeholder="Código" id="codigo">' +
+            '<button class="code-btn" type="button" onclick="aplicarCodigo()">Aplicar</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function aplicarCodigo() {
+    var codigo = document.getElementById('codigo').value.trim();
+    if (!codigo) return;
+    alert('Código recibido: ' + codigo + '\n(Esto es solo una prueba por ahora)');
+  }
+
+  render(data);
+</script>
