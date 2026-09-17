@@ -5,16 +5,24 @@
 
   <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Nimbo · Tu diagnóstico</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+    rel="stylesheet"
+  >
 
 
   <style>
 
     :root{
+
       --bg:#0A0F1C;
       --panel:#10182B;
       --ink:#EAF2FF;
@@ -27,147 +35,247 @@
       --bad:#FF6B6B;
     }
 
+
     *{
       box-sizing:border-box;
     }
 
+
     body{
+
       margin:0;
+
       background:var(--bg);
+
       color:var(--ink);
+
       font-family:'Inter',sans-serif;
+
       font-size:14px;
+
       padding:32px;
     }
 
+
     .wrap{
+
       max-width:600px;
+
       margin:0 auto;
     }
 
+
     .topbar{
+
       display:flex;
+
       justify-content:space-between;
+
       align-items:center;
+
       margin-bottom:32px;
     }
 
+
     .brand{
+
       display:flex;
+
       align-items:center;
+
       gap:9px;
     }
 
+
     .brand-word{
+
       font-family:'Space Grotesk',sans-serif;
+
       font-weight:700;
+
       font-size:16px;
+
       letter-spacing:.1em;
     }
 
+
     .brand-word .accent{
+
       color:var(--cyan);
-      text-shadow:0 0 4px rgba(92,225,230,.5);
+
+      text-shadow:
+        0 0 4px rgba(92,225,230,.5);
     }
 
+
     .theme-toggle{
+
       width:34px;
+
       height:34px;
+
       border-radius:9px;
+
       border:1px solid var(--line);
+
       background:var(--panel);
+
       display:flex;
+
       align-items:center;
+
       justify-content:center;
+
       cursor:pointer;
+
       color:var(--ink-soft);
     }
 
+
     .score-card{
+
       background:var(--panel);
+
       border:1px solid var(--line);
+
       border-radius:14px;
+
       padding:26px 28px;
+
       display:flex;
+
       align-items:center;
+
       gap:18px;
+
       margin-bottom:14px;
     }
 
+
     .ring-num{
+
       font-family:'IBM Plex Mono',monospace;
+
       font-size:28px;
+
       font-weight:600;
+
       text-shadow:
         0 0 5px rgba(92,225,230,.6),
         0 0 18px rgba(92,134,255,.4);
     }
 
+
     .score-status{
+
       font-size:14px;
+
       font-weight:700;
+
       color:var(--cyan);
     }
 
+
     .score-label{
+
       font-size:12px;
+
       color:var(--ink-soft);
     }
 
+
     .diagnosis{
+
       font-size:15px;
+
       line-height:1.65;
+
       color:var(--ink);
+
       margin:0 0 22px;
     }
 
+
     .diagnosis b{
+
       color:var(--cyan);
+
       font-weight:700;
     }
 
+
     .panel{
+
       background:var(--panel);
+
       border:1px solid var(--line);
+
       border-radius:14px;
+
       padding:20px 24px;
+
       margin-bottom:16px;
     }
 
+
     .panel h3{
+
       font-size:13px;
+
       font-weight:700;
+
       margin:0 0 12px;
+
       color:var(--ink-soft);
+
       text-transform:uppercase;
+
       letter-spacing:.04em;
     }
 
+
     table{
+
       width:100%;
+
       border-collapse:collapse;
     }
 
+
     td{
+
       padding:8px 0;
+
       font-size:13px;
+
       border-top:1px solid var(--line);
     }
 
+
     td.num{
+
       text-align:right;
+
       font-family:'IBM Plex Mono',monospace;
     }
 
+
     .status-dot{
+
       width:7px;
+
       height:7px;
+
       border-radius:50%;
+
       display:inline-block;
+
       margin-right:7px;
     }
 
+
     .upsell{
+
       background:linear-gradient(
         135deg,
         rgba(92,225,230,.08),
@@ -175,126 +283,216 @@
       );
 
       border:1px solid var(--line);
+
       border-radius:14px;
+
       padding:24px 26px;
+
       margin-bottom:16px;
     }
 
+
     .upsell h3{
+
       font-family:'Space Grotesk',sans-serif;
+
       font-size:17px;
+
       font-weight:600;
+
       margin:0 0 10px;
     }
 
+
     .upsell p{
+
       font-size:13.5px;
+
       color:var(--ink-soft);
+
       line-height:1.55;
+
       margin:0 0 16px;
     }
 
+
     .upsell ul{
+
       margin:0 0 20px;
+
       padding-left:0;
+
       list-style:none;
     }
 
+
     .upsell li{
+
       font-size:13.5px;
+
       padding:7px 0;
+
       display:flex;
+
       gap:8px;
     }
 
+
     .upsell li::before{
+
       content:"✓";
+
       color:var(--good);
+
       font-weight:700;
     }
+
 
     .cta{
+
       display:block;
+
       width:100%;
+
       background:var(--cyan);
+
       color:#0A0F1C;
+
       border:none;
+
       border-radius:12px;
+
       padding:15px;
+
       font-size:15px;
+
       font-weight:700;
+
       font-family:'Inter',sans-serif;
+
       cursor:pointer;
+
       text-align:center;
+
       text-decoration:none;
-      box-shadow:0 0 24px rgba(92,225,230,.35);
+
+      box-shadow:
+        0 0 24px rgba(92,225,230,.35);
     }
 
+
     .cta-note{
+
       text-align:center;
+
       font-size:12px;
+
       color:var(--ink-soft);
+
       margin-top:10px;
     }
 
+
     .code-wrap{
+
       margin-top:18px;
+
       text-align:center;
     }
 
+
     .code-label{
+
       font-size:11.5px;
+
       color:var(--ink-soft);
+
       opacity:.7;
+
       margin-bottom:6px;
     }
 
+
     .code-row{
+
       display:flex;
+
       gap:8px;
+
       max-width:260px;
+
       margin:0 auto;
     }
 
+
     .code-input{
+
       flex:1;
+
       background:transparent;
+
       border:1px solid var(--line);
+
       border-radius:8px;
+
       padding:8px 11px;
+
       color:var(--ink);
+
       font-size:13px;
+
       font-family:'Inter',sans-serif;
+
       outline:none;
     }
 
+
     .code-input::placeholder{
+
       color:var(--ink-soft);
+
       opacity:.6;
     }
 
+
     .code-input:focus{
+
       border-color:var(--cyan);
     }
 
+
     .code-btn{
+
       background:transparent;
+
       border:1px solid var(--line);
+
       border-radius:8px;
+
       padding:8px 12px;
+
       color:var(--ink-soft);
+
       font-size:12px;
+
       cursor:pointer;
+
       white-space:nowrap;
     }
 
+
     .code-btn:hover{
+
       border-color:var(--cyan);
+
       color:var(--cyan);
     }
 
+
     .loading{
+
       color:var(--ink-soft);
+
       font-size:13px;
     }
 
@@ -305,13 +503,21 @@
 
 <body>
 
+
   <div class="wrap">
+
 
     <div class="topbar">
 
+
       <div class="brand">
 
-        <svg width="22" height="22" viewBox="0 0 64 64">
+
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 64 64"
+        >
 
           <defs>
 
@@ -340,6 +546,7 @@
 
           </defs>
 
+
           <circle
             cx="32"
             cy="32"
@@ -349,6 +556,7 @@
             stroke-width="2.6"
             filter="url(#g)"
           />
+
 
           <circle
             cx="32"
@@ -360,6 +568,7 @@
             filter="url(#g)"
             opacity=".85"
           />
+
 
           <circle
             cx="32"
@@ -373,6 +582,7 @@
           />
 
         </svg>
+
 
         <span class="brand-word">
           NIM<span class="accent">B</span>O
@@ -404,28 +614,41 @@
 
   <script>
 
-    // ==========================================
+
+    // ==========================================================
     // CONFIGURACIÓN
-    // ==========================================
+    // ==========================================================
 
     const baseUrl =
       "https://script.google.com/macros/s/AKfycbyXUVAl4Th6CRPl50jDs6tQZtXPqaWQHEzlQ2NK2NCUf4ZytxIy2nowwzknUewPpj_6qA/exec";
 
 
-    // ==========================================
-    // OBTENER ID DE LA URL
-    // ==========================================
+    // ==========================================================
+    // ID DEL DIAGNÓSTICO
+    // ==========================================================
 
     const parametros =
-      new URLSearchParams(window.location.search);
+      new URLSearchParams(
+        window.location.search
+      );
+
 
     const id =
       parametros.get('id');
 
 
-    // ==========================================
+    // ==========================================================
+    // CONTADOR DE INTENTOS
+    // ==========================================================
+
+    let intentos = 0;
+
+    const maxIntentos = 10;
+
+
+    // ==========================================================
     // CARGAR DATOS
-    // ==========================================
+    // ==========================================================
 
     function cargarDatos(){
 
@@ -439,199 +662,164 @@
       }
 
 
-      fetch(
+      intentos++;
+
+
+      // --------------------------------------------------------
+      // Crear callback único
+      // --------------------------------------------------------
+
+      const callbackName =
+        'nimboCallback_' +
+        Date.now();
+
+
+      window[callbackName] =
+        function(respuesta){
+
+          // Limpiar callback
+          delete window[callbackName];
+
+
+          // Eliminar script
+          const script =
+            document.getElementById(
+              callbackName
+            );
+
+          if(script){
+            script.remove();
+          }
+
+
+          // ----------------------------------------------------
+          // Error devuelto por Apps Script
+          // ----------------------------------------------------
+
+          if(!respuesta.ok){
+
+            // Puede ser simplemente que el beacon todavía
+            // no haya terminado de guardar la fila.
+
+            if(
+              respuesta.error ===
+                'No se ha encontrado ese diagnóstico.'
+              &&
+              intentos < maxIntentos
+            ){
+
+              setTimeout(
+                cargarDatos,
+                500
+              );
+
+              return;
+            }
+
+
+            mostrarError(
+              respuesta.error ||
+              'No se han encontrado los datos.'
+            );
+
+            return;
+          }
+
+
+          // ----------------------------------------------------
+          // Datos encontrados
+          // ----------------------------------------------------
+
+          console.log(
+            'Datos recibidos:',
+            respuesta
+          );
+
+
+          const data =
+            respuesta.data;
+
+
+          render(data);
+        };
+
+
+      // --------------------------------------------------------
+      // Crear script JSONP
+      // --------------------------------------------------------
+
+      const script =
+        document.createElement('script');
+
+
+      script.id =
+        callbackName;
+
+
+      script.src =
         baseUrl +
         '?id=' +
-        encodeURIComponent(id)
-      )
-
-      .then(function(response){
-
-        if(!response.ok){
-
-          throw new Error(
-            'No se ha podido conectar con Nimbo.'
-          );
-
-        }
-
-        return response.json();
-
-      })
-
-      .then(function(datos){
-
-        console.log(
-          'Datos recibidos:',
-          datos
+        encodeURIComponent(id) +
+        '&prefix=' +
+        encodeURIComponent(
+          callbackName
         );
 
 
-        if(!datos.ok){
+      script.onerror =
+        function(){
 
-          throw new Error(
-            datos.error ||
-            'No se han encontrado los datos.'
+          delete window[callbackName];
+
+          script.remove();
+
+          // Reintentar por si hubo un fallo
+          // transitorio de red.
+
+          if(
+            intentos < maxIntentos
+          ){
+
+            setTimeout(
+              cargarDatos,
+              500
+            );
+
+            return;
+          }
+
+
+          mostrarError(
+            'No se han podido cargar los datos.'
           );
-
-        }
-
-
-        // De momento calculamos los scores aquí.
-        // Después trasladaremos esta lógica a Apps Script.
-
-        var resultado =
-          calcularScores(datos);
+        };
 
 
-        render(resultado);
-
-      })
-
-      .catch(function(error){
-
-        console.error(error);
-
-        mostrarError(error.message);
-
-      });
-
+      document.body.appendChild(script);
     }
 
 
-    // ==========================================
-    // CALCULADORA TEMPORAL
-    // ==========================================
-
-    function calcularScores(d){
-
-      /*
-       * Esta parte es provisional.
-       *
-       * La utilizamos para comprobar que:
-       *
-       * Sheets
-       * ↓
-       * Apps Script
-       * ↓
-       * Dashboard
-       *
-       * funciona correctamente.
-       */
-
-
-      var scoreGastos =
-        d.ingresos > 0
-        ? Math.max(
-            0,
-            Math.min(
-              100,
-              ((d.ingresos - d.gastos) / d.ingresos) * 100
-            )
-          )
-        : 0;
-
-
-      var scoreAhorro =
-        d.ingresos > 0
-        ? Math.max(
-            0,
-            Math.min(
-              100,
-              (d.ahorroMensual / d.ingresos) * 100 * 5
-            )
-          )
-        : 0;
-
-
-      var scoreInversion =
-        d.ingresos > 0
-        ? Math.max(
-            0,
-            Math.min(
-              100,
-              (d.inversionMensual / d.ingresos) * 100 * 5
-            )
-          )
-        : 0;
-
-
-      var mesesEmergencia =
-        d.gastos > 0
-        ? d.fondoEmergencia / d.gastos
-        : 0;
-
-
-      var scoreEmergencia =
-        Math.max(
-          0,
-          Math.min(
-            100,
-            mesesEmergencia / 6 * 100
-          )
-        );
-
-
-      var scoreDeudas =
-        d.ingresos > 0
-        ? Math.max(
-            0,
-            Math.min(
-              100,
-              100 - ((d.deuda / d.ingresos) * 10)
-            )
-          )
-        : 0;
-
-
-      var scoreTotal =
-        Math.round(
-          (
-            scoreGastos +
-            scoreAhorro +
-            scoreInversion +
-            scoreEmergencia +
-            scoreDeudas
-          ) / 5
-        );
-
-
-      return {
-
-        ScoreTotal:scoreTotal,
-
-        ScoreGastos:Math.round(scoreGastos),
-
-        ScoreAhorro:Math.round(scoreAhorro),
-
-        ScoreInversion:Math.round(scoreInversion),
-
-        ScoreEmergencia:Math.round(scoreEmergencia),
-
-        ScoreDeudas:Math.round(scoreDeudas)
-
-      };
-
-    }
-
-
-    // ==========================================
+    // ==========================================================
     // ERROR
-    // ==========================================
+    // ==========================================================
 
     function mostrarError(mensaje){
 
-      document.getElementById('contenido').innerHTML =
-        '<p class="loading" style="color:var(--bad);">' +
-        mensaje +
-        '</p>';
+      document.getElementById(
+        'contenido'
+      ).innerHTML =
 
+        '<p class="loading" style="color:var(--bad);">' +
+
+        mensaje +
+
+        '</p>';
     }
 
 
-    // ==========================================
+    // ==========================================================
     // COLORES
-    // ==========================================
+    // ==========================================================
 
     function colorEscala(score){
 
@@ -661,9 +849,12 @@
         : 1;
 
 
-      var a = stops[i];
+      var a =
+        stops[i];
 
-      var b = stops[i + 1];
+
+      var b =
+        stops[i + 1];
 
 
       var t =
@@ -674,32 +865,41 @@
       var r =
         Math.round(
           a.c[0] +
-          (b.c[0] - a.c[0]) * t
+          (b.c[0] - a.c[0]) *
+          t
         );
 
 
       var g =
         Math.round(
           a.c[1] +
-          (b.c[1] - a.c[1]) * t
+          (b.c[1] - a.c[1]) *
+          t
         );
 
 
       var bl =
         Math.round(
           a.c[2] +
-          (b.c[2] - a.c[2]) * t
+          (b.c[2] - a.c[2]) *
+          t
         );
 
 
-      return 'rgb(' + r + ',' + g + ',' + bl + ')';
+      return (
+        'rgb(' +
+        r + ',' +
+        g + ',' +
+        bl +
+        ')'
+      );
 
     }
 
 
-    // ==========================================
+    // ==========================================================
     // ESTADO
-    // ==========================================
+    // ==========================================================
 
     function estado(score){
 
@@ -713,18 +913,20 @@
 
       return {
 
-        texto:texto,
+        texto:
+          texto,
 
-        color:colorEscala(score)
+        color:
+          colorEscala(score)
 
       };
 
     }
 
 
-    // ==========================================
+    // ==========================================================
     // MENSAJES
-    // ==========================================
+    // ==========================================================
 
     var mensajes = {
 
@@ -746,9 +948,9 @@
     };
 
 
-    // ==========================================
+    // ==========================================================
     // ÁREA MÁS DÉBIL
-    // ==========================================
+    // ==========================================================
 
     function areaMasDebil(d){
 
@@ -760,18 +962,20 @@
         claves[0];
 
 
-      claves.forEach(function(k){
+      claves.forEach(
+        function(k){
 
-        if(
-          d[k] <
-          d[peor]
-        ){
+          if(
+            d[k] <
+            d[peor]
+          ){
 
-          peor = k;
+            peor = k;
+
+          }
 
         }
-
-      });
+      );
 
 
       return peor;
@@ -779,21 +983,47 @@
     }
 
 
-    // ==========================================
+    // ==========================================================
     // RENDER
-    // ==========================================
+    // ==========================================================
 
-    function render(d){
+    function render(data){
 
-      if(!d){
+      if(!data){
 
         mostrarError(
           'No hemos encontrado ese resultado.'
         );
 
         return;
-
       }
+
+
+      // --------------------------------------------------------
+      // Los scores vienen directamente de Apps Script
+      // --------------------------------------------------------
+
+      var d = {
+
+        ScoreTotal:
+          Number(data.scores.total) || 0,
+
+        ScoreGastos:
+          Number(data.scores.gastos) || 0,
+
+        ScoreAhorro:
+          Number(data.scores.ahorro) || 0,
+
+        ScoreInversion:
+          Number(data.scores.inversion) || 0,
+
+        ScoreEmergencia:
+          Number(data.scores.emergencia) || 0,
+
+        ScoreDeudas:
+          Number(data.scores.deudas) || 0
+
+      };
 
 
       var peor =
@@ -804,7 +1034,8 @@
         estado(d.ScoreTotal);
 
 
-      var intro = '';
+      var intro =
+        '';
 
 
       if(d.ScoreTotal >= 75){
@@ -827,63 +1058,86 @@
 
       var areas = [
 
-        ['Gastos',d.ScoreGastos],
+        [
+          'Gastos',
+          d.ScoreGastos
+        ],
 
-        ['Ahorro',d.ScoreAhorro],
+        [
+          'Ahorro',
+          d.ScoreAhorro
+        ],
 
-        ['Inversión',d.ScoreInversion],
+        [
+          'Inversión',
+          d.ScoreInversion
+        ],
 
-        ['Fondo de emergencia',d.ScoreEmergencia],
+        [
+          'Fondo de emergencia',
+          d.ScoreEmergencia
+        ],
 
-        ['Deudas',d.ScoreDeudas]
+        [
+          'Deudas',
+          d.ScoreDeudas
+        ]
 
       ];
 
 
       var filas =
-        areas.map(function(a){
+        areas
+          .map(
+            function(a){
 
-          var es =
-            estado(a[1]);
+              var es =
+                estado(a[1]);
 
 
-          return (
+              return (
 
-            '<tr>' +
+                '<tr>' +
 
-              '<td>' +
+                  '<td>' +
 
-                '<span ' +
+                    '<span ' +
 
-                  'class="status-dot" ' +
+                      'class="status-dot" ' +
 
-                  'style="background:' +
-                  es.color +
-                  '">' +
+                      'style="background:' +
 
-                '</span>' +
+                      es.color +
 
-                a[0] +
+                      '">' +
 
-              '</td>' +
+                    '</span>' +
 
-              '<td ' +
+                    a[0] +
 
-                'class="num" ' +
+                  '</td>' +
 
-                'style="color:' +
-                es.color +
-                '">' +
+                  '<td ' +
 
-                a[1] +
+                    'class="num" ' +
 
-              '</td>' +
+                    'style="color:' +
 
-            '</tr>'
+                    es.color +
 
-          );
+                    '">' +
 
-        }).join('');
+                    a[1] +
+
+                  '</td>' +
+
+                '</tr>'
+
+              );
+
+            }
+          )
+          .join('');
 
 
       document.getElementById(
@@ -984,9 +1238,27 @@
 
             '<div class="code-row">' +
 
-              '<input class="code-input" type="text" placeholder="Código" id="codigo">' +
+              '<input ' +
 
-              '<button class="code-btn" type="button" onclick="aplicarCodigo()">' +
+                'class="code-input" ' +
+
+                'type="text" ' +
+
+                'placeholder="Código" ' +
+
+                'id="codigo"' +
+
+              '>' +
+
+              '<button ' +
+
+                'class="code-btn" ' +
+
+                'type="button" ' +
+
+                'onclick="aplicarCodigo()"' +
+
+              '>' +
 
                 'Aplicar' +
 
@@ -1001,16 +1273,22 @@
     }
 
 
+    // ==========================================================
+    // CÓDIGO PROMOCIONAL
+    // ==========================================================
+
     function aplicarCodigo(){
 
       var codigo =
-        document.getElementById('codigo').value.trim();
+        document
+          .getElementById('codigo')
+          .value
+          .trim();
 
 
       if(!codigo){
 
         return;
-
       }
 
 
@@ -1023,9 +1301,9 @@
     }
 
 
-    // ==========================================
+    // ==========================================================
     // ARRANCAR
-    // ==========================================
+    // ==========================================================
 
     cargarDatos();
 
