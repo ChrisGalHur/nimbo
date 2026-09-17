@@ -7,271 +7,273 @@
 
   <title>Nimbo · Diagnóstico financiero</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+    rel="stylesheet">
 
   <style>
-    :root{
-      --bg:#0A0F1C;
-      --panel:#10182B;
-      --input:#0F1526;
-      --ink:#EAF2FF;
-      --ink-soft:#7C8CB3;
-      --line:#1E2B45;
-      --cyan:#5CE1E6;
-      --blue:#5C86FF;
-      --good:#5FE3A3;
-      --warn:#FFC163;
-      --bad:#FF6B6B;
+    :root {
+      --bg: #0A0F1C;
+      --panel: #10182B;
+      --input: #0F1526;
+      --ink: #EAF2FF;
+      --ink-soft: #7C8CB3;
+      --line: #1E2B45;
+      --cyan: #5CE1E6;
+      --blue: #5C86FF;
+      --good: #5FE3A3;
+      --warn: #FFC163;
+      --bad: #FF6B6B;
     }
 
-    *{
-      box-sizing:border-box;
+    * {
+      box-sizing: border-box;
     }
 
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--ink);
-      font-family:'Inter',sans-serif;
-      font-size:14px;
-      padding:32px;
-      transition:background .25s ease,color .25s ease;
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 32px;
+      transition: background .25s ease, color .25s ease;
     }
 
-    .wrap{
-      max-width:600px;
-      margin:0 auto;
+    .wrap {
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:32px;
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
     }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:9px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
     }
 
-    .brand-word{
-      font-family:'Space Grotesk',sans-serif;
-      font-weight:700;
-      font-size:16px;
-      letter-spacing:.1em;
+    .brand-word {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: .1em;
     }
 
-    .brand-word .accent{
-      color:var(--cyan);
-      text-shadow:0 0 4px rgba(92,225,230,.5);
+    .brand-word .accent {
+      color: var(--cyan);
+      text-shadow: 0 0 4px rgba(92, 225, 230, .5);
     }
 
-    .theme-toggle{
-      width:34px;
-      height:34px;
-      border-radius:9px;
-      border:1px solid var(--line);
-      background:var(--panel);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      color:var(--ink-soft);
-      font-size:16px;
-      transition:border-color .2s ease,color .2s ease,background .2s ease;
+    .theme-toggle {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--ink-soft);
+      font-size: 16px;
+      transition: border-color .2s ease, color .2s ease, background .2s ease;
     }
 
-    .theme-toggle:hover{
-      border-color:var(--cyan);
-      color:var(--cyan);
+    .theme-toggle:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
     }
 
-    .panel{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:26px 28px;
-      margin-bottom:22px;
-      transition:background .25s ease,border-color .25s ease;
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 26px 28px;
+      margin-bottom: 22px;
+      transition: background .25s ease, border-color .25s ease;
     }
 
-    .panel h2{
-      font-family:'Space Grotesk',sans-serif;
-      font-size:20px;
-      font-weight:600;
-      margin:0 0 26px;
+    .panel h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 26px;
     }
 
-    label{
-      display:block;
-      margin-bottom:22px;
-      font-size:13.5px;
-      color:var(--ink-soft);
+    label {
+      display: block;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
     }
 
-    .label-row{
-      display:flex;
-      align-items:center;
-      gap:7px;
-      margin-bottom:9px;
+    .label-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 9px;
     }
 
-    .label-text{
-      color:var(--ink-soft);
+    .label-text {
+      color: var(--ink-soft);
     }
 
-    .help{
-      position:relative;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:18px;
-      height:18px;
-      border:1px solid var(--line);
-      border-radius:50%;
-      color:var(--ink-soft);
-      font-family:'IBM Plex Mono',monospace;
-      font-size:11px;
-      font-weight:600;
-      cursor:help;
-      transition:border-color .2s ease,color .2s ease,background .2s ease;
+    .help {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: help;
+      transition: border-color .2s ease, color .2s ease, background .2s ease;
     }
 
-    .help:hover{
-      border-color:var(--cyan);
-      color:var(--cyan);
-      background:rgba(92,225,230,.06);
+    .help:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: rgba(92, 225, 230, .06);
     }
 
-    .help::after{
-      content:attr(data-tooltip);
-      position:absolute;
-      z-index:20;
-      left:0;
-      bottom:calc(100% + 9px);
-      width:230px;
-      padding:10px 12px;
-      background:#0D1424;
-      border:1px solid var(--line);
-      border-radius:9px;
-      color:var(--ink-soft);
-      font-family:'Inter',sans-serif;
-      font-size:12px;
-      font-weight:400;
-      line-height:1.45;
-      text-align:left;
-      box-shadow:0 10px 30px rgba(0,0,0,.35);
-      opacity:0;
-      visibility:hidden;
-      transform:translateY(4px);
-      transition:opacity .15s ease,transform .15s ease,visibility .15s ease;
-      pointer-events:none;
+    .help::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      z-index: 20;
+      left: 0;
+      bottom: calc(100% + 9px);
+      width: 230px;
+      padding: 10px 12px;
+      background: #0D1424;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--ink-soft);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.45;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(4px);
+      transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+      pointer-events: none;
     }
 
-    .help:hover::after{
-      opacity:1;
-      visibility:visible;
-      transform:translateY(0);
+    .help:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
 
-    input{
-      width:100%;
-      padding:12px 14px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background:var(--input);
-      color:var(--ink);
-      font-size:14px;
-      font-family:'Inter',sans-serif;
-      outline:none;
-      transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--input);
+      color: var(--ink);
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
     }
 
-    input::placeholder{
-      color:#4F5E80;
+    input::placeholder {
+      color: #4F5E80;
     }
 
-    input:focus{
-      border-color:var(--cyan);
-      background:var(--panel);
-      box-shadow:0 0 0 3px rgba(92,225,230,.08);
+    input:focus {
+      border-color: var(--cyan);
+      background: var(--panel);
+      box-shadow: 0 0 0 3px rgba(92, 225, 230, .08);
     }
 
-    .cta{
-      display:block;
-      width:100%;
-      background:var(--cyan);
-      color:#0A0F1C;
-      border:none;
-      border-radius:12px;
-      padding:15px;
-      font-size:15px;
-      font-weight:700;
-      font-family:'Inter',sans-serif;
-      cursor:pointer;
-      text-align:center;
-      box-shadow:0 0 24px rgba(92,225,230,.35);
-      margin-top:4px;
-      transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;
-      text-decoration:none;
+    .cta {
+      display: block;
+      width: 100%;
+      background: var(--cyan);
+      color: #0A0F1C;
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 0 24px rgba(92, 225, 230, .35);
+      margin-top: 4px;
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      text-decoration: none;
     }
 
-    .cta:hover{
-      transform:translateY(-1px);
-      box-shadow:0 0 30px rgba(92,225,230,.45);
-      filter:brightness(1.04);
+    .cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 30px rgba(92, 225, 230, .45);
+      filter: brightness(1.04);
     }
 
-    .cta:active{
-      transform:translateY(0);
+    .cta:active {
+      transform: translateY(0);
     }
 
-    .cta:disabled{
-      opacity:.7;
-      cursor:wait;
-      transform:none;
+    .cta:disabled {
+      opacity: .7;
+      cursor: wait;
+      transform: none;
     }
 
-    #resultado{
-      margin-top:20px;
-      font-size:13.5px;
-      color:var(--ink-soft);
-      line-height:1.5;
-      text-align:center;
+    #resultado {
+      margin-top: 20px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      text-align: center;
     }
 
-    .error{
-      color:var(--bad);
+    .error {
+      color: var(--bad);
     }
 
-    body.light{
-      --bg:#F4F7FC;
-      --panel:#FFFFFF;
-      --input:#F7F9FD;
-      --ink:#162039;
-      --ink-soft:#65728D;
-      --line:#DCE3F0;
+    body.light {
+      --bg: #F4F7FC;
+      --panel: #FFFFFF;
+      --input: #F7F9FD;
+      --ink: #162039;
+      --ink-soft: #65728D;
+      --line: #DCE3F0;
     }
 
-    body.light .help::after{
-      background:#FFFFFF;
-      box-shadow:0 10px 30px rgba(20,35,65,.12);
+    body.light .help::after {
+      background: #FFFFFF;
+      box-shadow: 0 10px 30px rgba(20, 35, 65, .12);
     }
 
-    @media(max-width:600px){
+    @media(max-width:600px) {
 
-      body{
-        padding:20px;
+      body {
+        padding: 20px;
       }
 
-      .panel{
-        padding:22px 20px;
+      .panel {
+        padding: 22px 20px;
       }
 
-      .help::after{
-        width:200px;
+      .help::after {
+        width: 200px;
       }
     }
   </style>
@@ -288,45 +290,20 @@
         <svg width="24" height="24" viewBox="0 0 64 64">
           <defs>
             <filter id="g" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feGaussianBlur stdDeviation="2" result="blur" />
               <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
           </defs>
 
-          <circle
-            cx="32"
-            cy="32"
-            r="10"
-            fill="none"
-            stroke="#5CE1E6"
-            stroke-width="2.6"
-            filter="url(#g)"
-          />
+          <circle cx="32" cy="32" r="10" fill="none" stroke="#5CE1E6" stroke-width="2.6" filter="url(#g)" />
 
-          <circle
-            cx="32"
-            cy="32"
-            r="18"
-            fill="none"
-            stroke="#5C86FF"
-            stroke-width="2"
-            filter="url(#g)"
-            opacity=".85"
-          />
+          <circle cx="32" cy="32" r="18" fill="none" stroke="#5C86FF" stroke-width="2" filter="url(#g)" opacity=".85" />
 
-          <circle
-            cx="32"
-            cy="32"
-            r="26"
-            fill="none"
-            stroke="#5C86FF"
-            stroke-width="1.4"
-            filter="url(#g)"
-            opacity=".45"
-          />
+          <circle cx="32" cy="32" r="26" fill="none" stroke="#5C86FF" stroke-width="1.4" filter="url(#g)"
+            opacity=".45" />
         </svg>
 
         <span class="brand-word">
@@ -335,13 +312,7 @@
 
       </div>
 
-      <button
-        class="theme-toggle"
-        id="themeToggle"
-        onclick="cambiarTema()"
-        title="Cambiar tema"
-        type="button"
-      >
+      <button class="theme-toggle" id="themeToggle" onclick="cambiarTema()" title="Cambiar tema" type="button">
         ☀︎
       </button>
 
@@ -358,20 +329,12 @@
         <div class="label-row">
           <span class="label-text">Ingresos mensuales</span>
 
-          <span
-            class="help"
-            data-tooltip="Introduce la cantidad aproximada que recibes cada mes después de impuestos."
-          >
+          <span class="help" data-tooltip="Introduce la cantidad aproximada que recibes cada mes después de impuestos.">
             ?
           </span>
         </div>
 
-        <input
-          type="number"
-          id="ingresos"
-          placeholder="Ej. 1000"
-          min="0"
-        >
+        <input type="number" id="ingresos" placeholder="Ej. 1000" min="0">
 
       </label>
 
@@ -381,20 +344,13 @@
         <div class="label-row">
           <span class="label-text">Gastos mensuales</span>
 
-          <span
-            class="help"
-            data-tooltip="Incluye tus gastos habituales del mes: vivienda, alimentación, transporte, ocio y suministros."
-          >
+          <span class="help"
+            data-tooltip="Incluye tus gastos habituales del mes: vivienda, alimentación, transporte, ocio y suministros.">
             ?
           </span>
         </div>
 
-        <input
-          type="number"
-          id="gastos"
-          placeholder="Ej. 900"
-          min="0"
-        >
+        <input type="number" id="gastos" placeholder="Ej. 900" min="0">
 
       </label>
 
@@ -404,20 +360,13 @@
         <div class="label-row">
           <span class="label-text">Ahorro mensual</span>
 
-          <span
-            class="help"
-            data-tooltip="Indica cuánto dinero consigues apartar cada mes para tus ahorros, sin contar lo que inviertes."
-          >
+          <span class="help"
+            data-tooltip="Indica cuánto dinero consigues apartar cada mes para tus ahorros, sin contar lo que inviertes.">
             ?
           </span>
         </div>
 
-        <input
-          type="number"
-          id="ahorroMensual"
-          placeholder="Ej. 150"
-          min="0"
-        >
+        <input type="number" id="ahorroMensual" placeholder="Ej. 150" min="0">
 
       </label>
 
@@ -427,20 +376,13 @@
         <div class="label-row">
           <span class="label-text">Inversión mensual</span>
 
-          <span
-            class="help"
-            data-tooltip="Introduce la cantidad que destinas cada mes a inversiones como fondos, acciones o ETF."
-          >
+          <span class="help"
+            data-tooltip="Introduce la cantidad que destinas cada mes a inversiones como fondos, acciones o ETF.">
             ?
           </span>
         </div>
 
-        <input
-          type="number"
-          id="inversionMensual"
-          placeholder="Ej. 50"
-          min="0"
-        >
+        <input type="number" id="inversionMensual" placeholder="Ej. 50" min="0">
 
       </label>
 
@@ -450,20 +392,13 @@
         <div class="label-row">
           <span class="label-text">Deuda total</span>
 
-          <span
-            class="help"
-            data-tooltip="Introduce el importe pendiente de préstamos, créditos o tarjetas. La hipoteca se analizará por separado."
-          >
+          <span class="help"
+            data-tooltip="Introduce el importe pendiente de préstamos, créditos o tarjetas. La hipoteca se analizará por separado.">
             ?
           </span>
         </div>
 
-        <input
-          type="number"
-          id="deuda"
-          placeholder="Ej. 0"
-          min="0"
-        >
+        <input type="number" id="deuda" placeholder="Ej. 0" min="0">
 
       </label>
 
@@ -473,30 +408,18 @@
         <div class="label-row">
           <span class="label-text">Fondo de emergencia</span>
 
-          <span
-            class="help"
-            data-tooltip="Dinero reservado y disponible para cubrir imprevistos sin recurrir a deuda ni vender inversiones."
-          >
+          <span class="help"
+            data-tooltip="Dinero reservado y disponible para cubrir imprevistos sin recurrir a deuda ni vender inversiones.">
             ?
           </span>
         </div>
 
-        <input
-          type="number"
-          id="fondoEmergencia"
-          placeholder="Ej. 1200"
-          min="0"
-        >
+        <input type="number" id="fondoEmergencia" placeholder="Ej. 1200" min="0">
 
       </label>
 
 
-      <button
-        class="cta"
-        id="btnCalcular"
-        onclick="enviar()"
-        type="button"
-      >
+      <button class="cta" id="btnCalcular" onclick="enviar()" type="button">
         Calcular mi puntuación →
       </button>
 
@@ -515,18 +438,18 @@
       "https://script.google.com/macros/s/AKfycbyXUVAl4Th6CRPl50jDs6tQZtXPqaWQHEzlQ2NK2NCUf4ZytxIy2nowwzknUewPpj_6qA/exec";
 
 
-    function cambiarTema(){
+    function cambiarTema() {
 
       document.body.classList.toggle('light');
 
       const boton =
         document.getElementById('themeToggle');
 
-      if(document.body.classList.contains('light')){
+      if (document.body.classList.contains('light')) {
 
         boton.innerHTML = '☾';
 
-      }else{
+      } else {
 
         boton.innerHTML = '☀︎';
 
@@ -535,7 +458,7 @@
     }
 
 
-    function enviar(){
+    function enviar() {
 
       const respuestas = {
 
@@ -569,14 +492,14 @@
 
       // Comprobamos los campos obligatorios
 
-      if(
+      if (
         respuestas.ingresos <= 0 ||
         respuestas.gastos < 0 ||
         respuestas.ahorroMensual < 0 ||
         respuestas.inversionMensual < 0 ||
         respuestas.deuda < 0 ||
         respuestas.fondoEmergencia < 0
-      ){
+      ) {
 
         resultado.innerHTML =
           '<span class="error">Revisa los datos introducidos.</span>';
@@ -595,78 +518,75 @@
 
       fetch(baseUrl, {
 
-        method:'POST',
+        method: 'POST',
 
-        body:JSON.stringify(respuestas)
-
-      })
-
-      .then(function(response){
-
-        if(!response.ok){
-
-          throw new Error(
-            'No se ha podido conectar con Nimbo.'
-          );
-
-        }
-
-        return response.json();
+        body: JSON.stringify(respuestas)
 
       })
 
-      .then(function(datos){
+        .then(function (response) {
 
-        console.log('Respuesta Apps Script:', datos);
+          if (!response.ok) {
 
+            throw new Error(
+              'No se ha podido conectar con Nimbo.'
+            );
 
-        if(!datos.ok){
+          }
 
-          throw new Error(
-            datos.error || 'Error desconocido.'
-          );
+          return response.json();
 
-        }
+        })
 
+        .then(function (datos) {
 
-        if(!datos.id){
+          console.log('Respuesta Apps Script:', datos);
 
-          throw new Error(
-            'No se ha recibido el identificador del diagnóstico.'
-          );
+          if (!datos.ok) {
 
-        }
+            throw new Error(
+              datos.error || 'Error desconocido.'
+            );
 
+          }
 
-        const url =
-          'dashboard_test.html?id=' +
-          encodeURIComponent(datos.id);
+          if (!datos.id) {
+
+            throw new Error(
+              'No se ha recibido el identificador del diagnóstico.'
+            );
+
+          }
+          
+          const url =
+            'dashboard_test.html?id=' +
+            encodeURIComponent(datos.id);
 
           window.location.href = url;
 
-      })
+        })
+        .catch(function (error) {
 
-      .catch(function(error){
-
-        console.error(error);
-
-
-        resultado.innerHTML =
-          '<span class="error">' +
-          error.message +
-          '</span>';
+          console.error(error);
 
 
-        boton.disabled = false;
+          resultado.innerHTML =
+            '<span class="error">' +
+            error.message +
+            '</span>';
 
-        boton.textContent =
-          'Calcular mi puntuación →';
 
-      });
+          boton.disabled = false;
+
+          boton.textContent =
+            'Calcular mi puntuación →';
+
+        });
 
     }
 
   </script>
 
 </body>
+
 </html>
