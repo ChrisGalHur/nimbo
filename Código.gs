@@ -1,66 +1,84 @@
-const SHEET_NAME = 'Respuestas';
- 
-// ---------- SERVIR LAS PÁGINAS ----------
- 
-function doGet(e) {
-
-  const page = e.parameter.page || 'test';
-
-  // ---------- TEST ----------
-  if (page === 'test') {
-
-    return HtmlService
-      .createTemplateFromFile('test')
-      .evaluate()
-      .setTitle('Nimbo — tu diagnóstico');
-  }
-
-
-  // ---------- DASHBOARD DEL TEST ----------
-  if (page === 'dashboard_test') {
-
-    const userId = e.parameter.id;
-    const data = getUserData(userId);
-
-    const template = HtmlService
-      .createTemplateFromFile('dashboard_test');
-
-    template.data = data;
-
-    return template
-      .evaluate()
-      .setTitle('Nimbo — tu diagnóstico');
-  }
-
-
-  // Página desconocida
-  return HtmlService
-    .createTemplateFromFile('test')
-    .evaluate()
-    .setTitle('Nimbo — tu diagnóstico');
-}
- 
-// ---------- RECIBIR EL TEST ----------
- 
 function doPost(e) {
-  const body = JSON.parse(e.postData.contents);
-  // body esperado, ej:
-  // { ingresos: 1800, gastos: 1200, ahorroMensual: 150,
-  //   inversionMensual: 50, deuda: 0, fondoEmergencia: 1200, objetivo: "casa" }
- 
-  const scores = calcularScores(body);
-  const userId = Utilities.getUuid();
- 
-  guardarFila(userId, body, scores);
- 
-  return ContentService
-    .createTextOutput(JSON.stringify({ id: userId, scores: scores }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
- 
-function procesarTest(respuestas) {
-  const scores = calcularScores(respuestas);
-  const userId = Utilities.getUuid();
-  guardarFila(userId, respuestas, scores);
-  return { id: userId, scores: scores };
+
+  try {
+
+    // Recibir datos enviados desde GitHub Pages
+    var datos = JSON.parse(e.postData.contents);
+
+
+    // Abrir la hoja
+    var hoja = SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName("Respuestas");
+
+
+    // Crear un ID único para este diagnóstico
+    var id = Utilities.getUuid();
+
+
+    // Guardar los datos
+    hoja.appendRow([
+
+      new Date(),
+
+      id,
+
+      datos.ingresos,
+
+      datos.gastos,
+
+      datos.ahorroMensual,
+
+      datos.inversionMensual,
+
+      datos.deuda,
+
+      datos.fondoEmergencia
+
+    ]);
+
+
+    // Responder al test
+    return ContentService
+
+      .createTextOutput(
+
+        JSON.stringify({
+
+          ok: true,
+
+          id: id
+
+        })
+
+      )
+
+      .setMimeType(
+        ContentService.MimeType.JSON
+      );
+
+
+  } catch(error) {
+
+
+    return ContentService
+
+      .createTextOutput(
+
+        JSON.stringify({
+
+          ok: false,
+
+          error: error.message
+
+        })
+
+      )
+
+      .setMimeType(
+        ContentService.MimeType.JSON
+      );
+
+  }
+
 }

@@ -1,415 +1,679 @@
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="es">
 
-<style>
-  :root{
-    --bg:#0A0F1C;
-    --panel:#10182B;
-    --input:#0F1526;
-    --ink:#EAF2FF;
-    --ink-soft:#7C8CB3;
-    --line:#1E2B45;
-    --cyan:#5CE1E6;
-    --blue:#5C86FF;
-    --good:#5FE3A3;
-    --warn:#FFC163;
-    --bad:#FF6B6B;
-  }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  *{ box-sizing:border-box; }
+  <title>Nimbo · Diagnóstico financiero</title>
 
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    font-size:14px;
-    padding:32px;
-    transition:background .25s ease, color .25s ease;
-  }
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 
-  .wrap{ max-width:600px; margin:0 auto; }
+  <style>
+    :root{
+      --bg:#0A0F1C;
+      --panel:#10182B;
+      --input:#0F1526;
+      --ink:#EAF2FF;
+      --ink-soft:#7C8CB3;
+      --line:#1E2B45;
+      --cyan:#5CE1E6;
+      --blue:#5C86FF;
+      --good:#5FE3A3;
+      --warn:#FFC163;
+      --bad:#FF6B6B;
+    }
 
-  .topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:32px;
-  }
+    *{
+      box-sizing:border-box;
+    }
 
-  .brand{ display:flex; align-items:center; gap:9px; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:'Inter',sans-serif;
+      font-size:14px;
+      padding:32px;
+      transition:background .25s ease,color .25s ease;
+    }
 
-  .brand-word{
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:700;
-    font-size:16px;
-    letter-spacing:0.1em;
-  }
+    .wrap{
+      max-width:600px;
+      margin:0 auto;
+    }
 
-  .brand-word .accent{
-    color:var(--cyan);
-    text-shadow:0 0 4px rgba(92,225,230,0.5);
-  }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:32px;
+    }
 
-  .theme-toggle{
-    width:34px;
-    height:34px;
-    border-radius:9px;
-    border:1px solid var(--line);
-    background:var(--panel);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    color:var(--ink-soft);
-    font-size:16px;
-    transition: border-color .2s ease, color .2s ease, background .2s ease;
-  }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:9px;
+    }
 
-  .theme-toggle:hover{
-    border-color:var(--cyan);
-    color:var(--cyan);
-  }
+    .brand-word{
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:700;
+      font-size:16px;
+      letter-spacing:.1em;
+    }
 
-  .panel{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:26px 28px;
-    margin-bottom:22px;
-    transition: background .25s ease, border-color .25s ease;
-  }
+    .brand-word .accent{
+      color:var(--cyan);
+      text-shadow:0 0 4px rgba(92,225,230,.5);
+    }
 
-  .panel h2{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:20px;
-    font-weight:600;
-    margin:0 0 26px;
-  }
+    .theme-toggle{
+      width:34px;
+      height:34px;
+      border-radius:9px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      color:var(--ink-soft);
+      font-size:16px;
+      transition:border-color .2s ease,color .2s ease,background .2s ease;
+    }
 
-  label{
-    display:block;
-    margin-bottom:22px;
-    font-size:13.5px;
-    color:var(--ink-soft);
-  }
+    .theme-toggle:hover{
+      border-color:var(--cyan);
+      color:var(--cyan);
+    }
 
-  .label-row{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    margin-bottom:9px;
-  }
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:26px 28px;
+      margin-bottom:22px;
+      transition:background .25s ease,border-color .25s ease;
+    }
 
-  .label-text{ color:var(--ink-soft); }
+    .panel h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:20px;
+      font-weight:600;
+      margin:0 0 26px;
+    }
 
-  .help{
-    position:relative;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:18px;
-    height:18px;
-    border:1px solid var(--line);
-    border-radius:50%;
-    color:var(--ink-soft);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    font-weight:600;
-    cursor:help;
-    transition: border-color .2s ease, color .2s ease, background .2s ease;
-  }
+    label{
+      display:block;
+      margin-bottom:22px;
+      font-size:13.5px;
+      color:var(--ink-soft);
+    }
 
-  .help:hover{
-    border-color:var(--cyan);
-    color:var(--cyan);
-    background:rgba(92,225,230,0.06);
-  }
+    .label-row{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      margin-bottom:9px;
+    }
 
-  .help::after{
-    content:attr(data-tooltip);
-    position:absolute;
-    z-index:20;
-    left:0;
-    bottom:calc(100% + 9px);
-    width:230px;
-    padding:10px 12px;
-    background:#0D1424;
-    border:1px solid var(--line);
-    border-radius:9px;
-    color:var(--ink-soft);
-    font-family:'Inter',sans-serif;
-    font-size:12px;
-    font-weight:400;
-    line-height:1.45;
-    text-align:left;
-    box-shadow:0 10px 30px rgba(0,0,0,0.35);
-    opacity:0;
-    visibility:hidden;
-    transform:translateY(4px);
-    transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
-    pointer-events:none;
-  }
+    .label-text{
+      color:var(--ink-soft);
+    }
 
-  .help:hover::after{
-    opacity:1;
-    visibility:visible;
-    transform:translateY(0);
-  }
+    .help{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:18px;
+      height:18px;
+      border:1px solid var(--line);
+      border-radius:50%;
+      color:var(--ink-soft);
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      font-weight:600;
+      cursor:help;
+      transition:border-color .2s ease,color .2s ease,background .2s ease;
+    }
 
-  input{
-    width:100%;
-    padding:12px 14px;
-    border-radius:10px;
-    border:1px solid var(--line);
-    background:var(--input);
-    color:var(--ink);
-    font-size:14px;
-    font-family:'Inter',sans-serif;
-    outline:none;
-    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
-  }
+    .help:hover{
+      border-color:var(--cyan);
+      color:var(--cyan);
+      background:rgba(92,225,230,.06);
+    }
 
-  input::placeholder{ color:#4F5E80; }
+    .help::after{
+      content:attr(data-tooltip);
+      position:absolute;
+      z-index:20;
+      left:0;
+      bottom:calc(100% + 9px);
+      width:230px;
+      padding:10px 12px;
+      background:#0D1424;
+      border:1px solid var(--line);
+      border-radius:9px;
+      color:var(--ink-soft);
+      font-family:'Inter',sans-serif;
+      font-size:12px;
+      font-weight:400;
+      line-height:1.45;
+      text-align:left;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(4px);
+      transition:opacity .15s ease,transform .15s ease,visibility .15s ease;
+      pointer-events:none;
+    }
 
-  input:focus{
-    border-color:var(--cyan);
-    background:var(--panel);
-    box-shadow:0 0 0 3px rgba(92,225,230,0.08);
-  }
+    .help:hover::after{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(0);
+    }
 
-  .cta{
-    display:block;
-    width:100%;
-    background:var(--cyan);
-    color:#0A0F1C;
-    border:none;
-    border-radius:12px;
-    padding:15px;
-    font-size:15px;
-    font-weight:700;
-    font-family:'Inter',sans-serif;
-    cursor:pointer;
-    text-align:center;
-    box-shadow:0 0 24px rgba(92,225,230,0.35);
-    margin-top:4px;
-    transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-    text-decoration:none;
-  }
+    input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:var(--input);
+      color:var(--ink);
+      font-size:14px;
+      font-family:'Inter',sans-serif;
+      outline:none;
+      transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+    }
 
-  .cta:hover{
-    transform:translateY(-1px);
-    box-shadow:0 0 30px rgba(92,225,230,0.45);
-    filter:brightness(1.04);
-  }
+    input::placeholder{
+      color:#4F5E80;
+    }
 
-  .cta:active{ transform:translateY(0); }
+    input:focus{
+      border-color:var(--cyan);
+      background:var(--panel);
+      box-shadow:0 0 0 3px rgba(92,225,230,.08);
+    }
 
-  #resultado{
-    margin-top:20px;
-    font-size:13.5px;
-    color:var(--ink-soft);
-    line-height:1.5;
-    text-align:center;
-  }
+    .cta{
+      display:block;
+      width:100%;
+      background:var(--cyan);
+      color:#0A0F1C;
+      border:none;
+      border-radius:12px;
+      padding:15px;
+      font-size:15px;
+      font-weight:700;
+      font-family:'Inter',sans-serif;
+      cursor:pointer;
+      text-align:center;
+      box-shadow:0 0 24px rgba(92,225,230,.35);
+      margin-top:4px;
+      transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;
+      text-decoration:none;
+    }
 
-  .error{ color:var(--bad); }
+    .cta:hover{
+      transform:translateY(-1px);
+      box-shadow:0 0 30px rgba(92,225,230,.45);
+      filter:brightness(1.04);
+    }
 
-  body.light{
-    --bg:#F4F7FC;
-    --panel:#FFFFFF;
-    --input:#F7F9FD;
-    --ink:#162039;
-    --ink-soft:#65728D;
-    --line:#DCE3F0;
-  }
+    .cta:active{
+      transform:translateY(0);
+    }
 
-  body.light .help::after{
-    background:#FFFFFF;
-    box-shadow:0 10px 30px rgba(20,35,65,0.12);
-  }
+    .cta:disabled{
+      opacity:.7;
+      cursor:wait;
+      transform:none;
+    }
 
-  @media(max-width:600px){
-    body{ padding:20px; }
-    .panel{ padding:22px 20px; }
-    .help::after{ width:200px; }
-  }
-</style>
+    #resultado{
+      margin-top:20px;
+      font-size:13.5px;
+      color:var(--ink-soft);
+      line-height:1.5;
+      text-align:center;
+    }
 
-<div class="wrap">
+    .error{
+      color:var(--bad);
+    }
 
-  <div class="topbar">
-    <div class="brand">
-      <svg width="24" height="24" viewBox="0 0 64 64">
-        <defs>
-          <filter id="g" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-        <circle cx="32" cy="32" r="10" fill="none" stroke="#5CE1E6" stroke-width="2.6" filter="url(#g)"/>
-        <circle cx="32" cy="32" r="18" fill="none" stroke="#5C86FF" stroke-width="2" filter="url(#g)" opacity="0.85"/>
-        <circle cx="32" cy="32" r="26" fill="none" stroke="#5C86FF" stroke-width="1.4" filter="url(#g)" opacity="0.45"/>
-      </svg>
-      <span class="brand-word">NIM<span class="accent">B</span>O</span>
+    body.light{
+      --bg:#F4F7FC;
+      --panel:#FFFFFF;
+      --input:#F7F9FD;
+      --ink:#162039;
+      --ink-soft:#65728D;
+      --line:#DCE3F0;
+    }
+
+    body.light .help::after{
+      background:#FFFFFF;
+      box-shadow:0 10px 30px rgba(20,35,65,.12);
+    }
+
+    @media(max-width:600px){
+
+      body{
+        padding:20px;
+      }
+
+      .panel{
+        padding:22px 20px;
+      }
+
+      .help::after{
+        width:200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <div class="topbar">
+
+      <div class="brand">
+
+        <svg width="24" height="24" viewBox="0 0 64 64">
+          <defs>
+            <filter id="g" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <circle
+            cx="32"
+            cy="32"
+            r="10"
+            fill="none"
+            stroke="#5CE1E6"
+            stroke-width="2.6"
+            filter="url(#g)"
+          />
+
+          <circle
+            cx="32"
+            cy="32"
+            r="18"
+            fill="none"
+            stroke="#5C86FF"
+            stroke-width="2"
+            filter="url(#g)"
+            opacity=".85"
+          />
+
+          <circle
+            cx="32"
+            cy="32"
+            r="26"
+            fill="none"
+            stroke="#5C86FF"
+            stroke-width="1.4"
+            filter="url(#g)"
+            opacity=".45"
+          />
+        </svg>
+
+        <span class="brand-word">
+          NIM<span class="accent">B</span>O
+        </span>
+
+      </div>
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        onclick="cambiarTema()"
+        title="Cambiar tema"
+        type="button"
+      >
+        ☀︎
+      </button>
+
     </div>
 
-    <button class="theme-toggle" id="themeToggle" onclick="cambiarTema()" title="Cambiar tema" type="button">
-      ☀︎
-    </button>
+
+    <div class="panel">
+
+      <h2>Tu diagnóstico financiero</h2>
+
+
+      <label>
+
+        <div class="label-row">
+          <span class="label-text">Ingresos mensuales</span>
+
+          <span
+            class="help"
+            data-tooltip="Introduce la cantidad aproximada que recibes cada mes después de impuestos."
+          >
+            ?
+          </span>
+        </div>
+
+        <input
+          type="number"
+          id="ingresos"
+          placeholder="Ej. 1000"
+          min="0"
+        >
+
+      </label>
+
+
+      <label>
+
+        <div class="label-row">
+          <span class="label-text">Gastos mensuales</span>
+
+          <span
+            class="help"
+            data-tooltip="Incluye tus gastos habituales del mes: vivienda, alimentación, transporte, ocio y suministros."
+          >
+            ?
+          </span>
+        </div>
+
+        <input
+          type="number"
+          id="gastos"
+          placeholder="Ej. 900"
+          min="0"
+        >
+
+      </label>
+
+
+      <label>
+
+        <div class="label-row">
+          <span class="label-text">Ahorro mensual</span>
+
+          <span
+            class="help"
+            data-tooltip="Indica cuánto dinero consigues apartar cada mes para tus ahorros, sin contar lo que inviertes."
+          >
+            ?
+          </span>
+        </div>
+
+        <input
+          type="number"
+          id="ahorroMensual"
+          placeholder="Ej. 150"
+          min="0"
+        >
+
+      </label>
+
+
+      <label>
+
+        <div class="label-row">
+          <span class="label-text">Inversión mensual</span>
+
+          <span
+            class="help"
+            data-tooltip="Introduce la cantidad que destinas cada mes a inversiones como fondos, acciones o ETF."
+          >
+            ?
+          </span>
+        </div>
+
+        <input
+          type="number"
+          id="inversionMensual"
+          placeholder="Ej. 50"
+          min="0"
+        >
+
+      </label>
+
+
+      <label>
+
+        <div class="label-row">
+          <span class="label-text">Deuda total</span>
+
+          <span
+            class="help"
+            data-tooltip="Introduce el importe pendiente de préstamos, créditos o tarjetas. La hipoteca se analizará por separado."
+          >
+            ?
+          </span>
+        </div>
+
+        <input
+          type="number"
+          id="deuda"
+          placeholder="Ej. 0"
+          min="0"
+        >
+
+      </label>
+
+
+      <label>
+
+        <div class="label-row">
+          <span class="label-text">Fondo de emergencia</span>
+
+          <span
+            class="help"
+            data-tooltip="Dinero reservado y disponible para cubrir imprevistos sin recurrir a deuda ni vender inversiones."
+          >
+            ?
+          </span>
+        </div>
+
+        <input
+          type="number"
+          id="fondoEmergencia"
+          placeholder="Ej. 1200"
+          min="0"
+        >
+
+      </label>
+
+
+      <button
+        class="cta"
+        id="btnCalcular"
+        onclick="enviar()"
+        type="button"
+      >
+        Calcular mi puntuación →
+      </button>
+
+
+      <p id="resultado"></p>
+
+    </div>
+
   </div>
 
-  <div class="panel">
-    <h2>Tu diagnóstico financiero</h2>
 
-    <label>
-      <div class="label-row">
-        <span class="label-text">Ingresos mensuales</span>
-        <span class="help" data-tooltip="Introduce la cantidad aproximada que recibes cada mes después de impuestos.">?</span>
-      </div>
-      <input type="number" id="ingresos" placeholder="Ej. 1000">
-    </label>
+  <script>
 
-    <label>
-      <div class="label-row">
-        <span class="label-text">Gastos mensuales</span>
-        <span class="help" data-tooltip="Incluye tus gastos habituales del mes: vivienda, alimentación, transporte, ocio y suministros.">?</span>
-      </div>
-      <input type="number" id="gastos" placeholder="Ej. 900">
-    </label>
+    // URL DE TU WEB APP DE GOOGLE APPS SCRIPT
+    const baseUrl =
+      "https://script.google.com/macros/s/AKfycbyXUVAl4Th6CRPl50jDs6tQZtXPqaWQHEzlQ2NK2NCUf4ZytxIy2nowwzknUewPpj_6qA/exec";
 
-    <label>
-      <div class="label-row">
-        <span class="label-text">Ahorro mensual</span>
-        <span class="help" data-tooltip="Indica cuánto dinero consigues apartar cada mes para tus ahorros, sin contar lo que inviertes.">?</span>
-      </div>
-      <input type="number" id="ahorroMensual" placeholder="Ej. 150">
-    </label>
 
-    <label>
-      <div class="label-row">
-        <span class="label-text">Inversión mensual</span>
-        <span class="help" data-tooltip="Introduce la cantidad que destinas cada mes a inversiones como fondos, acciones o ETF.">?</span>
-      </div>
-      <input type="number" id="inversionMensual" placeholder="Ej. 50">
-    </label>
+    function cambiarTema(){
 
-    <label>
-      <div class="label-row">
-        <span class="label-text">Deuda total</span>
-        <span class="help" data-tooltip="Introduce el importe pendiente de préstamos, créditos o tarjetas. La hipoteca se analizará por separado.">?</span>
-      </div>
-      <input type="number" id="deuda" placeholder="Ej. 0">
-    </label>
+      document.body.classList.toggle('light');
 
-    <label>
-      <div class="label-row">
-        <span class="label-text">Fondo de emergencia</span>
-        <span class="help" data-tooltip="Dinero reservado y disponible para cubrir imprevistos sin recurrir a deuda ni vender inversiones.">?</span>
-      </div>
-      <input type="number" id="fondoEmergencia" placeholder="Ej. 1200">
-    </label>
+      const boton =
+        document.getElementById('themeToggle');
 
-    <button class="cta" id="btnCalcular" onclick="enviar()" type="button">
-      Calcular mi puntuación →
-    </button>
+      if(document.body.classList.contains('light')){
 
-    <p id="resultado"></p>
-  </div>
+        boton.innerHTML = '☾';
 
-</div>
+      }else{
 
-<script>
-  var baseUrl = "https://script.google.com/macros/s/AKfycbyXUVAl4Th6CRPl50jDs6tQZtXPqaWQHEzlQ2NK2NCUf4ZytxIy2nowwzknUewPpj_6qA/exec";
+        boton.innerHTML = '☀︎';
 
-  function cambiarTema(){
-    document.body.classList.toggle('light');
-    var boton = document.getElementById('themeToggle');
-    if(document.body.classList.contains('light')){
-      boton.innerHTML = '☾';
-    }else{
-      boton.innerHTML = '☀︎';
-    }
-  }
+      }
 
-  function enviar(){
-
-  const respuestas = {
-    ingresos: Number(document.getElementById('ingresos').value),
-    gastos: Number(document.getElementById('gastos').value),
-    ahorroMensual: Number(document.getElementById('ahorroMensual').value),
-    inversionMensual: Number(document.getElementById('inversionMensual').value),
-    deuda: Number(document.getElementById('deuda').value),
-    fondoEmergencia: Number(document.getElementById('fondoEmergencia').value)
-  };
-
-  var boton = document.getElementById('btnCalcular');
-
-  boton.disabled = true;
-  boton.textContent = 'Calculando...';
-
-  fetch(baseUrl, {
-    method: 'POST',
-    body: JSON.stringify(respuestas)
-  })
-  .then(function(response) {
-    if (!response.ok) {
-      throw new Error('Error al conectar con Nimbo');
     }
 
-    return response.json();
-  })
-  .then(function(resultado) {
 
-    var url = 'dashboard_test.html?id=' + resultado.id;
+    function enviar(){
 
-    document.getElementById('resultado').innerHTML =
-      '<a href="' + url + '" class="cta" style="margin-top:16px;">' +
-        'Ver mi resultado →' +
-      '</a>';
+      const respuestas = {
 
-    boton.style.display = 'none';
+        ingresos:
+          Number(document.getElementById('ingresos').value),
 
-  })
-  .catch(function(error) {
+        gastos:
+          Number(document.getElementById('gastos').value),
 
-    document.getElementById('resultado').innerHTML =
-      '<span class="error">Error: ' + error.message + '</span>';
+        ahorroMensual:
+          Number(document.getElementById('ahorroMensual').value),
 
-    boton.disabled = false;
-    boton.textContent = 'Calcular mi puntuación →';
+        inversionMensual:
+          Number(document.getElementById('inversionMensual').value),
 
-  });
-}
+        deuda:
+          Number(document.getElementById('deuda').value),
 
-  var boton = document.getElementById('btnCalcular');
-  boton.disabled = true;
-  boton.textContent = 'Calculando...';
+        fondoEmergencia:
+          Number(document.getElementById('fondoEmergencia').value)
 
-  // ⚠️ Pon aquí tu URL real de la Web App
-  var baseUrl = "https://script.google.com/macros/s/AKfycbyXUVAl4Th6CRPl50jDs6tQZtXPqaWQHEzlQ2NK2NCUf4ZytxIy2nowwzknUewPpj_6qA/exec";
+      };
 
-  google.script.run
-    .withSuccessHandler(function(resultado){
 
-      var url = baseUrl + '?page=dashboard_test&id=' + resultado.id;
+      const boton =
+        document.getElementById('btnCalcular');
 
-      document.getElementById('resultado').innerHTML =
-        '<a href="' + url + '" target="_top" class="cta" style="margin-top:16px;">' +
+      const resultado =
+        document.getElementById('resultado');
+
+
+      // Comprobamos los campos obligatorios
+
+      if(
+        respuestas.ingresos <= 0 ||
+        respuestas.gastos < 0 ||
+        respuestas.ahorroMensual < 0 ||
+        respuestas.inversionMensual < 0 ||
+        respuestas.deuda < 0 ||
+        respuestas.fondoEmergencia < 0
+      ){
+
+        resultado.innerHTML =
+          '<span class="error">Revisa los datos introducidos.</span>';
+
+        return;
+
+      }
+
+
+      boton.disabled = true;
+
+      boton.textContent = 'Calculando...';
+
+      resultado.innerHTML = '';
+
+
+      fetch(baseUrl, {
+
+        method:'POST',
+
+        body:JSON.stringify(respuestas)
+
+      })
+
+      .then(function(response){
+
+        if(!response.ok){
+
+          throw new Error(
+            'No se ha podido conectar con Nimbo.'
+          );
+
+        }
+
+        return response.json();
+
+      })
+
+      .then(function(datos){
+
+        console.log('Respuesta Apps Script:', datos);
+
+
+        if(!datos.ok){
+
+          throw new Error(
+            datos.error || 'Error desconocido.'
+          );
+
+        }
+
+
+        if(!datos.id){
+
+          throw new Error(
+            'No se ha recibido el identificador del diagnóstico.'
+          );
+
+        }
+
+
+        const url =
+          'dashboard_test.html?id=' +
+          encodeURIComponent(datos.id);
+
+
+        resultado.innerHTML =
+          '<a href="' + url + '" class="cta">' +
           'Ver mi resultado →' +
-        '</a>';
+          '</a>';
 
-      boton.style.display = 'none';
-    })
-    .withFailureHandler(function(error){
-      document.getElementById('resultado').innerHTML =
-        '<span class="error">Error: ' + error.message + '</span>';
 
-      boton.disabled = false;
-      boton.textContent = 'Calcular mi puntuación →';
-    })
-    .procesarTest(respuestas);
-}
-</script>
+        boton.style.display = 'none';
+
+      })
+
+      .catch(function(error){
+
+        console.error(error);
+
+
+        resultado.innerHTML =
+          '<span class="error">' +
+          error.message +
+          '</span>';
+
+
+        boton.disabled = false;
+
+        boton.textContent =
+          'Calcular mi puntuación →';
+
+      });
+
+    }
+
+  </script>
+
+</body>
+</html>
