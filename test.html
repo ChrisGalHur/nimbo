@@ -462,24 +462,32 @@
 
       const respuestas = {
 
-        ingresos:
-          Number(document.getElementById('ingresos').value),
+        // Generamos el ID aquí, en el navegador
+        id: crypto.randomUUID(),
 
-        gastos:
-          Number(document.getElementById('gastos').value),
+        ingresos: Number(
+          document.getElementById('ingresos').value
+        ),
 
-        ahorroMensual:
-          Number(document.getElementById('ahorroMensual').value),
+        gastos: Number(
+          document.getElementById('gastos').value
+        ),
 
-        inversionMensual:
-          Number(document.getElementById('inversionMensual').value),
+        ahorroMensual: Number(
+          document.getElementById('ahorroMensual').value
+        ),
 
-        deuda:
-          Number(document.getElementById('deuda').value),
+        inversionMensual: Number(
+          document.getElementById('inversionMensual').value
+        ),
 
-        fondoEmergencia:
-          Number(document.getElementById('fondoEmergencia').value)
+        deuda: Number(
+          document.getElementById('deuda').value
+        ),
 
+        fondoEmergencia: Number(
+          document.getElementById('fondoEmergencia').value
+        )
       };
 
 
@@ -490,97 +498,88 @@
         document.getElementById('resultado');
 
 
-      // Comprobamos los campos obligatorios
+      // ----------------------------------------------------------
+      // VALIDAR DATOS
+      // ----------------------------------------------------------
 
       if (
+
         respuestas.ingresos <= 0 ||
+
         respuestas.gastos < 0 ||
+
         respuestas.ahorroMensual < 0 ||
+
         respuestas.inversionMensual < 0 ||
+
         respuestas.deuda < 0 ||
+
         respuestas.fondoEmergencia < 0
+
       ) {
 
         resultado.innerHTML =
           '<span class="error">Revisa los datos introducidos.</span>';
 
         return;
-
       }
 
 
+      // ----------------------------------------------------------
+      // ESTADO "CALCULANDO"
+      // ----------------------------------------------------------
+
       boton.disabled = true;
 
-      boton.textContent = 'Calculando...';
+      boton.textContent =
+        'Calculando...';
 
       resultado.innerHTML = '';
 
+
+      // ----------------------------------------------------------
+      // ENVIAR A APPS SCRIPT
+      //
+      // IMPORTANTE:
+      // no utilizamos headers ni intentamos leer la respuesta.
+      // ----------------------------------------------------------
 
       fetch(baseUrl, {
 
         method: 'POST',
 
+        mode: 'no-cors',
+
         body: JSON.stringify(respuestas)
 
       })
 
-        .then(function (response) {
+        .then(function () {
 
-          if (!response.ok) {
+          // El POST ha sido enviado.
+          // Ya conocemos el ID porque lo hemos generado nosotros.
 
-            throw new Error(
-              'No se ha podido conectar con Nimbo.'
-            );
-
-          }
-
-          return response.json();
-
-        })
-
-        .then(function (datos) {
-
-          console.log('Respuesta Apps Script:', datos);
-
-          if (!datos.ok) {
-
-            throw new Error(
-              datos.error || 'Error desconocido.'
-            );
-
-          }
-
-          if (!datos.id) {
-
-            throw new Error(
-              'No se ha recibido el identificador del diagnóstico.'
-            );
-
-          }
-          
           const url =
             'dashboard_test.html?id=' +
-            encodeURIComponent(datos.id);
+            encodeURIComponent(respuestas.id);
 
           window.location.href = url;
 
         })
+
         .catch(function (error) {
 
           console.error(error);
 
-
           resultado.innerHTML =
             '<span class="error">' +
-            error.message +
+            'No se ha podido enviar el diagnóstico.' +
             '</span>';
-
 
           boton.disabled = false;
 
           boton.textContent =
             'Calcular mi puntuación →';
-
         });
 
     }
