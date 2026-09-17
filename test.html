@@ -346,6 +346,45 @@
   };
 
   var boton = document.getElementById('btnCalcular');
+
+  boton.disabled = true;
+  boton.textContent = 'Calculando...';
+
+  fetch(baseUrl, {
+    method: 'POST',
+    body: JSON.stringify(respuestas)
+  })
+  .then(function(response) {
+    if (!response.ok) {
+      throw new Error('Error al conectar con Nimbo');
+    }
+
+    return response.json();
+  })
+  .then(function(resultado) {
+
+    var url = 'dashboard_test.html?id=' + resultado.id;
+
+    document.getElementById('resultado').innerHTML =
+      '<a href="' + url + '" class="cta" style="margin-top:16px;">' +
+        'Ver mi resultado →' +
+      '</a>';
+
+    boton.style.display = 'none';
+
+  })
+  .catch(function(error) {
+
+    document.getElementById('resultado').innerHTML =
+      '<span class="error">Error: ' + error.message + '</span>';
+
+    boton.disabled = false;
+    boton.textContent = 'Calcular mi puntuación →';
+
+  });
+}
+
+  var boton = document.getElementById('btnCalcular');
   boton.disabled = true;
   boton.textContent = 'Calculando...';
 
