@@ -642,14 +642,7 @@
           'dashboard_test.html?id=' +
           encodeURIComponent(datos.id);
 
-
-        resultado.innerHTML =
-          '<a href="' + url + '" class="cta">' +
-          'Ver mi resultado →' +
-          '</a>';
-
-
-        boton.style.display = 'none';
+          window.location.href = url;
 
       })
 
