@@ -2,17 +2,27 @@
 <html lang="es">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Nimbo · Diagnóstico financiero</title>
 
+
   <link
     href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
-    rel="stylesheet">
+    rel="stylesheet"
+  >
+
 
   <style>
+
     :root {
+
       --bg: #0A0F1C;
       --panel: #10182B;
       --input: #0F1526;
@@ -26,229 +36,422 @@
       --bad: #FF6B6B;
     }
 
+
     * {
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
+
       background: var(--bg);
+
       color: var(--ink);
+
       font-family: 'Inter', sans-serif;
+
       font-size: 14px;
+
       padding: 32px;
-      transition: background .25s ease, color .25s ease;
+
+      transition:
+        background .25s ease,
+        color .25s ease;
     }
 
+
     .wrap {
+
       max-width: 600px;
+
       margin: 0 auto;
     }
 
+
     .topbar {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
       margin-bottom: 32px;
     }
 
+
     .brand {
+
       display: flex;
+
       align-items: center;
+
       gap: 9px;
     }
 
+
     .brand-word {
+
       font-family: 'Space Grotesk', sans-serif;
+
       font-weight: 700;
+
       font-size: 16px;
+
       letter-spacing: .1em;
     }
 
+
     .brand-word .accent {
+
       color: var(--cyan);
-      text-shadow: 0 0 4px rgba(92, 225, 230, .5);
+
+      text-shadow:
+        0 0 4px rgba(92, 225, 230, .5);
     }
+
 
     .theme-toggle {
+
       width: 34px;
+
       height: 34px;
+
       border-radius: 9px;
+
       border: 1px solid var(--line);
+
       background: var(--panel);
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       cursor: pointer;
+
       color: var(--ink-soft);
+
       font-size: 16px;
-      transition: border-color .2s ease, color .2s ease, background .2s ease;
+
+      transition:
+        border-color .2s ease,
+        color .2s ease,
+        background .2s ease;
     }
 
+
     .theme-toggle:hover {
+
       border-color: var(--cyan);
+
       color: var(--cyan);
     }
 
+
     .panel {
+
       background: var(--panel);
+
       border: 1px solid var(--line);
+
       border-radius: 14px;
+
       padding: 26px 28px;
+
       margin-bottom: 22px;
-      transition: background .25s ease, border-color .25s ease;
+
+      transition:
+        background .25s ease,
+        border-color .25s ease;
     }
 
+
     .panel h2 {
+
       font-family: 'Space Grotesk', sans-serif;
+
       font-size: 20px;
+
       font-weight: 600;
+
       margin: 0 0 26px;
     }
 
+
     label {
+
       display: block;
+
       margin-bottom: 22px;
+
       font-size: 13.5px;
+
       color: var(--ink-soft);
     }
 
+
     .label-row {
+
       display: flex;
+
       align-items: center;
+
       gap: 7px;
+
       margin-bottom: 9px;
     }
 
+
     .label-text {
+
       color: var(--ink-soft);
     }
+
 
     .help {
+
       position: relative;
+
       display: inline-flex;
+
       align-items: center;
+
       justify-content: center;
+
       width: 18px;
+
       height: 18px;
+
       border: 1px solid var(--line);
+
       border-radius: 50%;
+
       color: var(--ink-soft);
+
       font-family: 'IBM Plex Mono', monospace;
+
       font-size: 11px;
+
       font-weight: 600;
+
       cursor: help;
-      transition: border-color .2s ease, color .2s ease, background .2s ease;
+
+      transition:
+        border-color .2s ease,
+        color .2s ease,
+        background .2s ease;
     }
 
+
     .help:hover {
+
       border-color: var(--cyan);
+
       color: var(--cyan);
+
       background: rgba(92, 225, 230, .06);
     }
 
+
     .help::after {
+
       content: attr(data-tooltip);
+
       position: absolute;
+
       z-index: 20;
+
       left: 0;
+
       bottom: calc(100% + 9px);
+
       width: 230px;
+
       padding: 10px 12px;
+
       background: #0D1424;
+
       border: 1px solid var(--line);
+
       border-radius: 9px;
+
       color: var(--ink-soft);
+
       font-family: 'Inter', sans-serif;
+
       font-size: 12px;
+
       font-weight: 400;
+
       line-height: 1.45;
+
       text-align: left;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, .35);
+
       opacity: 0;
+
       visibility: hidden;
+
       transform: translateY(4px);
-      transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+
+      transition:
+        opacity .15s ease,
+        transform .15s ease,
+        visibility .15s ease;
+
       pointer-events: none;
     }
 
+
     .help:hover::after {
+
       opacity: 1;
+
       visibility: visible;
+
       transform: translateY(0);
     }
 
+
     input {
+
       width: 100%;
+
       padding: 12px 14px;
+
       border-radius: 10px;
+
       border: 1px solid var(--line);
+
       background: var(--input);
+
       color: var(--ink);
+
       font-size: 14px;
+
       font-family: 'Inter', sans-serif;
+
       outline: none;
-      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
     }
 
+
     input::placeholder {
+
       color: #4F5E80;
     }
 
+
     input:focus {
+
       border-color: var(--cyan);
+
       background: var(--panel);
-      box-shadow: 0 0 0 3px rgba(92, 225, 230, .08);
+
+      box-shadow:
+        0 0 0 3px rgba(92, 225, 230, .08);
     }
 
+
     .cta {
+
       display: block;
+
       width: 100%;
+
       background: var(--cyan);
+
       color: #0A0F1C;
+
       border: none;
+
       border-radius: 12px;
+
       padding: 15px;
+
       font-size: 15px;
+
       font-weight: 700;
+
       font-family: 'Inter', sans-serif;
+
       cursor: pointer;
+
       text-align: center;
-      box-shadow: 0 0 24px rgba(92, 225, 230, .35);
+
+      box-shadow:
+        0 0 24px rgba(92, 225, 230, .35);
+
       margin-top: 4px;
-      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+
+      transition:
+        transform .15s ease,
+        box-shadow .15s ease,
+        filter .15s ease;
+
       text-decoration: none;
     }
 
+
     .cta:hover {
+
       transform: translateY(-1px);
-      box-shadow: 0 0 30px rgba(92, 225, 230, .45);
+
+      box-shadow:
+        0 0 30px rgba(92, 225, 230, .45);
+
       filter: brightness(1.04);
     }
 
+
     .cta:active {
+
       transform: translateY(0);
     }
 
+
     .cta:disabled {
+
       opacity: .7;
+
       cursor: wait;
+
       transform: none;
     }
 
+
     #resultado {
+
       margin-top: 20px;
+
       font-size: 13.5px;
+
       color: var(--ink-soft);
+
       line-height: 1.5;
+
       text-align: center;
     }
 
+
     .error {
+
       color: var(--bad);
     }
 
+
     body.light {
+
       --bg: #F4F7FC;
       --panel: #FFFFFF;
       --input: #F7F9FD;
@@ -257,54 +460,123 @@
       --line: #DCE3F0;
     }
 
+
     body.light .help::after {
+
       background: #FFFFFF;
-      box-shadow: 0 10px 30px rgba(20, 35, 65, .12);
+
+      box-shadow:
+        0 10px 30px rgba(20, 35, 65, .12);
     }
+
 
     @media(max-width:600px) {
 
       body {
+
         padding: 20px;
       }
 
+
       .panel {
+
         padding: 22px 20px;
       }
 
+
       .help::after {
+
         width: 200px;
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <div class="wrap">
+
 
     <div class="topbar">
 
+
       <div class="brand">
 
-        <svg width="24" height="24" viewBox="0 0 64 64">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 64 64"
+        >
+
           <defs>
-            <filter id="g" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="2" result="blur" />
+
+            <filter
+              id="g"
+              x="-60%"
+              y="-60%"
+              width="220%"
+              height="220%"
+            >
+
+              <feGaussianBlur
+                stdDeviation="2"
+                result="blur"
+              />
+
               <feMerge>
+
                 <feMergeNode in="blur" />
+
                 <feMergeNode in="SourceGraphic" />
+
               </feMerge>
+
             </filter>
+
           </defs>
 
-          <circle cx="32" cy="32" r="10" fill="none" stroke="#5CE1E6" stroke-width="2.6" filter="url(#g)" />
 
-          <circle cx="32" cy="32" r="18" fill="none" stroke="#5C86FF" stroke-width="2" filter="url(#g)" opacity=".85" />
+          <circle
+            cx="32"
+            cy="32"
+            r="10"
+            fill="none"
+            stroke="#5CE1E6"
+            stroke-width="2.6"
+            filter="url(#g)"
+          />
 
-          <circle cx="32" cy="32" r="26" fill="none" stroke="#5C86FF" stroke-width="1.4" filter="url(#g)"
-            opacity=".45" />
+
+          <circle
+            cx="32"
+            cy="32"
+            r="18"
+            fill="none"
+            stroke="#5C86FF"
+            stroke-width="2"
+            filter="url(#g)"
+            opacity=".85"
+          />
+
+
+          <circle
+            cx="32"
+            cy="32"
+            r="26"
+            fill="none"
+            stroke="#5C86FF"
+            stroke-width="1.4"
+            filter="url(#g)"
+            opacity=".45"
+          />
+
         </svg>
+
 
         <span class="brand-word">
           NIM<span class="accent">B</span>O
@@ -312,7 +584,14 @@
 
       </div>
 
-      <button class="theme-toggle" id="themeToggle" onclick="cambiarTema()" title="Cambiar tema" type="button">
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        onclick="cambiarTema()"
+        title="Cambiar tema"
+        type="button"
+      >
         ☀︎
       </button>
 
@@ -321,20 +600,36 @@
 
     <div class="panel">
 
-      <h2>Tu diagnóstico financiero</h2>
+
+      <h2>
+        Tu diagnóstico financiero
+      </h2>
 
 
       <label>
 
         <div class="label-row">
-          <span class="label-text">Ingresos mensuales</span>
 
-          <span class="help" data-tooltip="Introduce la cantidad aproximada que recibes cada mes después de impuestos.">
+          <span class="label-text">
+            Ingresos mensuales
+          </span>
+
+          <span
+            class="help"
+            data-tooltip="Introduce la cantidad aproximada que recibes cada mes después de impuestos."
+          >
             ?
           </span>
+
         </div>
 
-        <input type="number" id="ingresos" placeholder="Ej. 1000" min="0">
+
+        <input
+          type="number"
+          id="ingresos"
+          placeholder="Ej. 1000"
+          min="0"
+        >
 
       </label>
 
@@ -342,15 +637,27 @@
       <label>
 
         <div class="label-row">
-          <span class="label-text">Gastos mensuales</span>
 
-          <span class="help"
-            data-tooltip="Incluye tus gastos habituales del mes: vivienda, alimentación, transporte, ocio y suministros.">
+          <span class="label-text">
+            Gastos mensuales
+          </span>
+
+          <span
+            class="help"
+            data-tooltip="Incluye tus gastos habituales del mes: vivienda, alimentación, transporte, ocio y suministros."
+          >
             ?
           </span>
+
         </div>
 
-        <input type="number" id="gastos" placeholder="Ej. 900" min="0">
+
+        <input
+          type="number"
+          id="gastos"
+          placeholder="Ej. 900"
+          min="0"
+        >
 
       </label>
 
@@ -358,15 +665,27 @@
       <label>
 
         <div class="label-row">
-          <span class="label-text">Ahorro mensual</span>
 
-          <span class="help"
-            data-tooltip="Indica cuánto dinero consigues apartar cada mes para tus ahorros, sin contar lo que inviertes.">
+          <span class="label-text">
+            Ahorro mensual
+          </span>
+
+          <span
+            class="help"
+            data-tooltip="Indica cuánto dinero consigues apartar cada mes para tus ahorros, sin contar lo que inviertes."
+          >
             ?
           </span>
+
         </div>
 
-        <input type="number" id="ahorroMensual" placeholder="Ej. 150" min="0">
+
+        <input
+          type="number"
+          id="ahorroMensual"
+          placeholder="Ej. 150"
+          min="0"
+        >
 
       </label>
 
@@ -374,15 +693,27 @@
       <label>
 
         <div class="label-row">
-          <span class="label-text">Inversión mensual</span>
 
-          <span class="help"
-            data-tooltip="Introduce la cantidad que destinas cada mes a inversiones como fondos, acciones o ETF.">
+          <span class="label-text">
+            Inversión mensual
+          </span>
+
+          <span
+            class="help"
+            data-tooltip="Introduce la cantidad que destinas cada mes a inversiones como fondos, acciones o ETF."
+          >
             ?
           </span>
+
         </div>
 
-        <input type="number" id="inversionMensual" placeholder="Ej. 50" min="0">
+
+        <input
+          type="number"
+          id="inversionMensual"
+          placeholder="Ej. 50"
+          min="0"
+        >
 
       </label>
 
@@ -390,15 +721,27 @@
       <label>
 
         <div class="label-row">
-          <span class="label-text">Deuda total</span>
 
-          <span class="help"
-            data-tooltip="Introduce el importe pendiente de préstamos, créditos o tarjetas. La hipoteca se analizará por separado.">
+          <span class="label-text">
+            Deuda total
+          </span>
+
+          <span
+            class="help"
+            data-tooltip="Introduce el importe pendiente de préstamos, créditos o tarjetas. La hipoteca se analizará por separado."
+          >
             ?
           </span>
+
         </div>
 
-        <input type="number" id="deuda" placeholder="Ej. 0" min="0">
+
+        <input
+          type="number"
+          id="deuda"
+          placeholder="Ej. 0"
+          min="0"
+        >
 
       </label>
 
@@ -406,25 +749,43 @@
       <label>
 
         <div class="label-row">
-          <span class="label-text">Fondo de emergencia</span>
 
-          <span class="help"
-            data-tooltip="Dinero reservado y disponible para cubrir imprevistos sin recurrir a deuda ni vender inversiones.">
+          <span class="label-text">
+            Fondo de emergencia
+          </span>
+
+          <span
+            class="help"
+            data-tooltip="Dinero reservado y disponible para cubrir imprevistos sin recurrir a deuda ni vender inversiones."
+          >
             ?
           </span>
+
         </div>
 
-        <input type="number" id="fondoEmergencia" placeholder="Ej. 1200" min="0">
+
+        <input
+          type="number"
+          id="fondoEmergencia"
+          placeholder="Ej. 1200"
+          min="0"
+        >
 
       </label>
 
 
-      <button class="cta" id="btnCalcular" onclick="enviar()" type="button">
+      <button
+        class="cta"
+        id="btnCalcular"
+        onclick="enviar()"
+        type="button"
+      >
         Calcular mi puntuación →
       </button>
 
 
       <p id="resultado"></p>
+
 
     </div>
 
@@ -433,10 +794,18 @@
 
   <script>
 
-    // URL DE TU WEB APP DE GOOGLE APPS SCRIPT
+
+    // ==========================================================
+    // URL DE APPS SCRIPT
+    // ==========================================================
+
     const baseUrl =
       "https://script.google.com/macros/s/AKfycbyXUVAl4Th6CRPl50jDs6tQZtXPqaWQHEzlQ2NK2NCUf4ZytxIy2nowwzknUewPpj_6qA/exec";
 
+
+    // ==========================================================
+    // CAMBIAR TEMA
+    // ==========================================================
 
     function cambiarTema() {
 
@@ -445,49 +814,65 @@
       const boton =
         document.getElementById('themeToggle');
 
-      if (document.body.classList.contains('light')) {
 
-        boton.innerHTML = '☾';
-
-      } else {
-
-        boton.innerHTML = '☀︎';
-
-      }
-
+      boton.innerHTML =
+        document.body.classList.contains('light')
+          ? '☾'
+          : '☀︎';
     }
 
 
+    // ==========================================================
+    // ENVIAR TEST
+    // ==========================================================
+
     function enviar() {
+
 
       const respuestas = {
 
-        // Generamos el ID aquí, en el navegador
-        id: crypto.randomUUID(),
+        // El ID nace aquí.
+        // Apps Script guardará exactamente este ID.
 
-        ingresos: Number(
-          document.getElementById('ingresos').value
-        ),
+        id:
+          crypto.randomUUID(),
 
-        gastos: Number(
-          document.getElementById('gastos').value
-        ),
 
-        ahorroMensual: Number(
-          document.getElementById('ahorroMensual').value
-        ),
+        ingresos:
+          Number(
+            document.getElementById('ingresos').value
+          ),
 
-        inversionMensual: Number(
-          document.getElementById('inversionMensual').value
-        ),
 
-        deuda: Number(
-          document.getElementById('deuda').value
-        ),
+        gastos:
+          Number(
+            document.getElementById('gastos').value
+          ),
 
-        fondoEmergencia: Number(
-          document.getElementById('fondoEmergencia').value
-        )
+
+        ahorroMensual:
+          Number(
+            document.getElementById('ahorroMensual').value
+          ),
+
+
+        inversionMensual:
+          Number(
+            document.getElementById('inversionMensual').value
+          ),
+
+
+        deuda:
+          Number(
+            document.getElementById('deuda').value
+          ),
+
+
+        fondoEmergencia:
+          Number(
+            document.getElementById('fondoEmergencia').value
+          )
+
       };
 
 
@@ -498,9 +883,9 @@
         document.getElementById('resultado');
 
 
-      // ----------------------------------------------------------
-      // VALIDAR DATOS
-      // ----------------------------------------------------------
+      // ========================================================
+      // VALIDACIÓN
+      // ========================================================
 
       if (
 
@@ -519,15 +904,17 @@
       ) {
 
         resultado.innerHTML =
-          '<span class="error">Revisa los datos introducidos.</span>';
+          '<span class="error">' +
+          'Revisa los datos introducidos.' +
+          '</span>';
 
         return;
       }
 
 
-      // ----------------------------------------------------------
-      // ESTADO "CALCULANDO"
-      // ----------------------------------------------------------
+      // ========================================================
+      // ESTADO
+      // ========================================================
 
       boton.disabled = true;
 
@@ -537,50 +924,62 @@
       resultado.innerHTML = '';
 
 
-      // ----------------------------------------------------------
+      // ========================================================
       // ENVIAR A APPS SCRIPT
       //
-      // IMPORTANTE:
-      // no utilizamos headers ni intentamos leer la respuesta.
-      // ----------------------------------------------------------
+      // sendBeacon envía el POST sin que tengamos que esperar
+      // ni leer la respuesta del servidor.
+      // ========================================================
 
-      fetch(baseUrl, {
+      const datos =
+        new Blob(
+          [
+            JSON.stringify(respuestas)
+          ],
+          {
+            type:
+              'text/plain;charset=utf-8'
+          }
+        );
 
-        method: 'POST',
 
-        mode: 'no-cors',
+      const enviado =
+        navigator.sendBeacon(
+          baseUrl,
+          datos
+        );
 
-        body: JSON.stringify(respuestas)
 
-      })
+      // ========================================================
+      // IR DIRECTAMENTE AL DASHBOARD
+      // ========================================================
 
-        .then(function () {
+      if (enviado) {
 
-          // El POST ha sido enviado.
-          // Ya conocemos el ID porque lo hemos generado nosotros.
+        window.location.href =
+          'dashboard_test.html?id=' +
+          encodeURIComponent(
+            respuestas.id
+          );
 
-          const url =
-            'dashboard_test.html?id=' +
-            encodeURIComponent(respuestas.id);
+        return;
+      }
 
-          window.location.href = url;
 
-        })
+      // ========================================================
+      // ERROR
+      // ========================================================
 
-        .catch(function (error) {
+      resultado.innerHTML =
+        '<span class="error">' +
+        'No se ha podido enviar el diagnóstico.' +
+        '</span>';
 
-          console.error(error);
 
-          resultado.innerHTML =
-            '<span class="error">' +
-            'No se ha podido enviar el diagnóstico.' +
-            '</span>';
+      boton.disabled = false;
 
-          boton.disabled = false;
-
-          boton.textContent =
-            'Calcular mi puntuación →';
-        });
+      boton.textContent =
+        'Calcular mi puntuación →';
 
     }
 
