@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:5500",
                         "http://127.0.0.1:5500",
-                        "https://nimbo-peach.vercel.app"
+                        "https://nimbo-front.vercel.app"
                 )
                 .allowedMethods(
                         "GET",
