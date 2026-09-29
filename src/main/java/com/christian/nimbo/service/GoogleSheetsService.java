@@ -1,5 +1,6 @@
 package com.christian.nimbo.service;
 
+import com.christian.nimbo.model.User;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.sheets.v4.Sheets;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +23,11 @@ public class GoogleSheetsService {
     private static final String SPREADSHEET_ID =
             "1Hpur_sOfJNMPasO2xDMw-g4sfALvN__zaFh76Le-8XY";
 
-    private static final String SHEET_NAME =
+    private static final String DIAGNOSTIC_SHEET =
             "Respuestas";
+
+    private static final String USER_SHEET =
+            "Users";
 
     private final Sheets sheets;
 
@@ -50,35 +53,7 @@ public class GoogleSheetsService {
                         .build();
     }
 
-    //region Read
-
-    public String readSheet() throws IOException {
-
-        String range =
-                SHEET_NAME + "!A1:N5";
-
-        ValueRange response =
-                sheets
-                        .spreadsheets()
-                        .values()
-                        .get(
-                                SPREADSHEET_ID,
-                                range
-                        )
-                        .execute();
-
-        if (response.getValues() == null) {
-            return "[]";
-        }
-
-        return response
-                .getValues()
-                .toString();
-    }
-
-    //endregion
-
-    //region Write
+    //region Diagnostics
 
     public void appendDiagnostic(
             String id,
@@ -97,7 +72,7 @@ public class GoogleSheetsService {
     ) throws IOException {
 
         String range =
-                SHEET_NAME + "!A:N";
+                DIAGNOSTIC_SHEET + "!A:N";
 
         List<Object> row =
                 List.of(
@@ -136,15 +111,12 @@ public class GoogleSheetsService {
                 .execute();
     }
 
-    //endregion
-
-    //region Get diagnostic
 
     public Map<String, Object> getDiagnostic(
             String id) throws IOException {
 
         String range =
-                SHEET_NAME + "!A2:N";
+                DIAGNOSTIC_SHEET + "!A2:N";
 
         ValueRange response =
                 sheets
@@ -265,6 +237,126 @@ public class GoogleSheetsService {
 
     //endregion
 
+    //region Users
+
+    public void appendUser(
+            User user) throws IOException {
+
+        String range =
+                USER_SHEET + "!A:F";
+
+        List<Object> row =
+                List.of(
+                        OffsetDateTime.now().toString(),
+                        user.id(),
+                        user.name(),
+                        user.email(),
+                        user.passwordHash(),
+                        user.plan()
+                );
+
+        ValueRange body =
+                new ValueRange()
+                        .setValues(
+                                List.of(row)
+                        );
+
+        sheets
+                .spreadsheets()
+                .values()
+                .append(
+                        SPREADSHEET_ID,
+                        range,
+                        body
+                )
+                .setValueInputOption("RAW")
+                .setInsertDataOption("INSERT_ROWS")
+                .execute();
+    }
+
+
+    public User findUserByEmail(
+            String email) throws IOException {
+
+        String range =
+                USER_SHEET + "!A2:F";
+
+        ValueRange response =
+                sheets
+                        .spreadsheets()
+                        .values()
+                        .get(
+                                SPREADSHEET_ID,
+                                range
+                        )
+                        .execute();
+
+        List<List<Object>> rows =
+                response.getValues();
+
+        if (rows == null) {
+            return null;
+        }
+
+        for (List<Object> row : rows) {
+
+            if (row.size() < 6) {
+                continue;
+            }
+
+            String storedEmail =
+                    String.valueOf(row.get(3))
+                            .trim()
+                            .toLowerCase();
+
+            if (!storedEmail.equals(
+                    email.toLowerCase()
+            )) {
+                continue;
+            }
+
+            return new User(
+                    String.valueOf(row.get(1)),
+                    String.valueOf(row.get(2)),
+                    storedEmail,
+                    String.valueOf(row.get(4)),
+                    String.valueOf(row.get(5))
+            );
+        }
+
+        return null;
+    }
+
+    //endregion
+
+    //region Sheet test
+
+    public String readSheet() throws IOException {
+
+        String range =
+                DIAGNOSTIC_SHEET + "!A1:N5";
+
+        ValueRange response =
+                sheets
+                        .spreadsheets()
+                        .values()
+                        .get(
+                                SPREADSHEET_ID,
+                                range
+                        )
+                        .execute();
+
+        if (response.getValues() == null) {
+            return "[]";
+        }
+
+        return response
+                .getValues()
+                .toString();
+    }
+
+    //endregion
+
     //region Helpers
 
     private double toNumber(Object value) {
@@ -278,11 +370,13 @@ public class GoogleSheetsService {
         }
 
         try {
+
             return Double.parseDouble(
                     value.toString()
             );
 
         } catch (NumberFormatException e) {
+
             return 0;
         }
     }

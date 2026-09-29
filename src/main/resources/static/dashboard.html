@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Nimbo · Dashboard</title>
+
+  <link
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+          rel="stylesheet"
+  >
+
+  <style>
+
+    :root {
+      --bg:#0A0F1C;
+      --panel:#10182B;
+      --ink:#EAF2FF;
+      --ink-soft:#7C8CB3;
+      --line:#1E2B45;
+      --cyan:#5CE1E6;
+      --blue:#5C86FF;
+      --good:#5FE3A3;
+      --bad:#FF6B6B;
+    }
+
+    * {
+      box-sizing:border-box;
+    }
+
+    body {
+      margin:0;
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:'Inter',sans-serif;
+      display:flex;
+    }
+
+    .sidebar {
+      width:230px;
+      min-height:100vh;
+      border-right:1px solid var(--line);
+      background:var(--panel);
+      padding:24px 16px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .brand {
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:700;
+      font-size:17px;
+      letter-spacing:.1em;
+      padding:0 10px;
+      margin-bottom:32px;
+    }
+
+    .accent {
+      color:var(--cyan);
+    }
+
+    .navigation {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .nav-item {
+      display:block;
+      padding:11px 12px;
+      border-radius:9px;
+      color:var(--ink-soft);
+      text-decoration:none;
+      font-size:13px;
+      transition:background .2s ease,color .2s ease;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background:rgba(92,225,230,.08);
+      color:var(--ink);
+    }
+
+    .sidebar-bottom {
+      margin-top:auto;
+      padding:12px 10px 0;
+      border-top:1px solid var(--line);
+    }
+
+    .user-name {
+      font-size:13px;
+      margin-bottom:10px;
+    }
+
+    .user-plan {
+      color:var(--ink-soft);
+      font-size:11px;
+      margin-bottom:14px;
+      font-family:'IBM Plex Mono',monospace;
+    }
+
+    .logout {
+      color:var(--ink-soft);
+      background:none;
+      border:0;
+      padding:0;
+      cursor:pointer;
+      font:inherit;
+      font-size:12px;
+    }
+
+    .logout:hover {
+      color:var(--cyan);
+    }
+
+    .content {
+      flex:1;
+      padding:40px;
+    }
+
+    .content-inner {
+      max-width:900px;
+      margin:0 auto;
+    }
+
+    .eyebrow {
+      color:var(--cyan);
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:10px;
+    }
+
+    h1 {
+      font-family:'Space Grotesk',sans-serif;
+      margin:0 0 10px;
+      font-size:30px;
+    }
+
+    .intro {
+      color:var(--ink-soft);
+      margin:0 0 30px;
+      line-height:1.6;
+    }
+
+    .card {
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:24px;
+    }
+
+    .card h2 {
+      font-family:'Space Grotesk',sans-serif;
+      font-size:18px;
+      margin:0 0 8px;
+    }
+
+    .card p {
+      color:var(--ink-soft);
+      line-height:1.5;
+      margin:0;
+    }
+
+    @media(max-width:700px) {
+
+      body {
+        display:block;
+      }
+
+      .sidebar {
+        width:100%;
+        min-height:auto;
+        border-right:0;
+        border-bottom:1px solid var(--line);
+      }
+
+      .sidebar-bottom {
+        margin-top:20px;
+      }
+
+      .content {
+        padding:24px 20px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+<aside class="sidebar">
+
+  <div class="brand">
+    NIM<span class="accent">B</span>O
+  </div>
+
+  <nav
+          id="navigation"
+          class="navigation"
+  ></nav>
+
+  <div class="sidebar-bottom">
+
+    <div
+            id="userName"
+            class="user-name"
+    ></div>
+
+    <div
+            id="userPlan"
+            class="user-plan"
+    ></div>
+
+    <button
+            class="logout"
+            onclick="logout()"
+            type="button"
+    >
+      Cerrar sesión
+    </button>
+
+  </div>
+
+</aside>
+
+
+<main class="content">
+
+  <div class="content-inner">
+
+    <div class="eyebrow">
+      Nimbo
+    </div>
+
+    <h1 id="welcome">
+      Tu espacio financiero
+    </h1>
+
+    <p class="intro">
+      Desde aquí podrás consultar y trabajar tu situación financiera.
+    </p>
+
+    <div class="card">
+
+      <h2>
+        Inicio
+      </h2>
+
+      <p>
+        Esta es la página principal de tu dashboard. Aquí iremos construyendo progresivamente el resto de funcionalidades de Nimbo.
+      </p>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<script>
+
+  //region Authentication
+
+  const storedUser =
+    localStorage.getItem(
+      'nimboUser'
+    );
+
+
+  if (!storedUser) {
+
+    window.location.href =
+      'login.html';
+
+  }
+
+
+  const user =
+    JSON.parse(storedUser);
+
+
+  document.getElementById(
+    'userName'
+  ).textContent =
+    user.name;
+
+
+  document.getElementById(
+    'userPlan'
+  ).textContent =
+    user.plan;
+
+
+  document.getElementById(
+    'welcome'
+  ).textContent =
+    'Hola, ' +
+    user.name;
+
+
+  function logout() {
+
+    localStorage.removeItem(
+      'nimboUser'
+    );
+
+    window.location.href =
+      'index.html';
+  }
+
+  //endregion
+
+
+  //region Navigation
+
+  const navigationItems = [
+
+    {
+      id:'home',
+      label:'Inicio',
+      href:'dashboard.html',
+      locked:false
+    }
+
+    // Add future features here:
+    //
+    // {
+    //   id:'expenses',
+    //   label:'Gastos',
+    //   href:'expenses.html',
+    //   locked:false
+    // },
+    //
+    // {
+    //   id:'investments',
+    //   label:'Inversión',
+    //   href:'investments.html',
+    //   locked:true
+    // }
+
+  ];
+
+
+  const navigation =
+    document.getElementById(
+      'navigation'
+    );
+
+
+  navigationItems.forEach(
+    function(item) {
+
+      const link =
+        document.createElement('a');
+
+      link.className =
+        'nav-item' +
+        (
+          item.id === 'home'
+            ? ' active'
+            : ''
+        );
+
+      link.href =
+        item.href;
+
+      link.textContent =
+        item.label;
+
+      navigation.appendChild(
+        link
+      );
+    }
+  );
+
+  //endregion
+
+</script>
+
+</body>
+
+</html>
