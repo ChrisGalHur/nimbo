@@ -11,7 +11,6 @@ import java.util.Map;
 public class NimboController {
 
     private final NimboService nimboService;
-
     private final GoogleSheetsService googleSheetsService;
 
     public NimboController(
@@ -39,22 +38,15 @@ public class NimboController {
     }
     //endregion
 
-    //region Pages
-    @GetMapping("/")
-    public String home() {
-        return "forward:/index.html";
-    }
-    //endregion
 
     //region Health
-
     @GetMapping("/api/health")
     @ResponseBody
     public String health() {
         return "Nimbo funcionando";
     }
-
     //endregion
+
 
     //region Diagnostics
 
@@ -65,6 +57,7 @@ public class NimboController {
 
         return nimboService.createDiagnostic(data);
     }
+
 
     @GetMapping("/api/diagnostics/{id}")
     @ResponseBody
