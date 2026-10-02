@@ -3,7 +3,6 @@ package com.christian.nimbo.service;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,12 +10,19 @@ import java.util.UUID;
 public class NimboService {
 
     private final GoogleSheetsService googleSheetsService;
+    private final ScoresService scoresService;
+    private final DiagnosisService diagnosisService;
 
     public NimboService(
-            GoogleSheetsService googleSheetsService) {
+            GoogleSheetsService googleSheetsService,
+            ScoresService scoresService, DiagnosisService diagnosisService) {
 
         this.googleSheetsService =
                 googleSheetsService;
+
+        this.scoresService =
+                scoresService;
+        this.diagnosisService = diagnosisService;
     }
 
     //region Create diagnostic
@@ -27,182 +33,67 @@ public class NimboService {
         String id =
                 UUID.randomUUID().toString();
 
+
+        //region Obtener datos
+
         double income =
-                toNumber(data.get("income"));
+                toNumber(
+                        data.get("income")
+                );
+
 
         double expenses =
-                toNumber(data.get("expenses"));
+                toNumber(
+                        data.get("expenses")
+                );
+
 
         double monthlySaving =
-                toNumber(data.get("monthlySaving"));
+                toNumber(
+                        data.get("monthlySaving")
+                );
+
 
         double monthlyInvestment =
-                toNumber(data.get("monthlyInvestment"));
+                toNumber(
+                        data.get("monthlyInvestment")
+                );
+
 
         double debt =
-                toNumber(data.get("debt"));
+                toNumber(
+                        data.get("debt")
+                );
+
 
         double emergencyFund =
-                toNumber(data.get("emergencyFund"));
-
-        //region Expenses score
-
-        double expensesScore = 0;
-
-        if (income > 0) {
-
-            expensesScore =
-                    ((income - expenses) / income) * 100;
-        }
-
-        expensesScore =
-                clamp(
-                        expensesScore,
-                        0,
-                        100
+                toNumber(
+                        data.get("emergencyFund")
                 );
 
         //endregion
 
-        //region Saving score
 
-        double savingScore = 0;
-
-        if (income > 0) {
-
-            savingScore =
-                    (monthlySaving / income) * 100 * 5;
-        }
-
-        savingScore =
-                clamp(
-                        savingScore,
-                        0,
-                        100
-                );
-
-        //endregion
-
-        //region Investment score
-
-        double investmentScore = 0;
-
-        if (income > 0) {
-
-            investmentScore =
-                    (monthlyInvestment / income) * 100 * 5;
-        }
-
-        investmentScore =
-                clamp(
-                        investmentScore,
-                        0,
-                        100
-                );
-
-        //endregion
-
-        //region Emergency fund score
-
-        double emergencyMonths = 0;
-
-        if (expenses > 0) {
-
-            emergencyMonths =
-                    emergencyFund / expenses;
-        }
-
-        double emergencyScore =
-                (emergencyMonths / 6) * 100;
-
-        emergencyScore =
-                clamp(
-                        emergencyScore,
-                        0,
-                        100
-                );
-
-        //endregion
-
-        //region Debt score
-
-        double debtScore = 100;
-
-        if (income > 0) {
-
-            debtScore =
-                    100 - ((debt / income) * 10);
-        }
-
-        debtScore =
-                clamp(
-                        debtScore,
-                        0,
-                        100
-                );
-
-        //endregion
-
-        //region Total score
-
-        int totalScore =
-                (int) Math.round(
-                        (
-                                expensesScore +
-                                        savingScore +
-                                        investmentScore +
-                                        emergencyScore +
-                                        debtScore
-                        ) / 5
-                );
-
-        //endregion
-
-        //region Scores
+        //region Calcular scores
 
         Map<String, Object> scores =
-                new HashMap<>();
+                scoresService.calculate(
+                        income,
+                        expenses,
+                        monthlyInvestment,
+                        debt,
+                        emergencyFund
+                );
 
-        scores.put(
-                "expenses",
-                Math.round(expensesScore)
-        );
-
-        scores.put(
-                "saving",
-                Math.round(savingScore)
-        );
-
-        scores.put(
-                "investment",
-                Math.round(investmentScore)
-        );
-
-        scores.put(
-                "emergency",
-                Math.round(emergencyScore)
-        );
-
-        scores.put(
-                "debt",
-                Math.round(debtScore)
-        );
-
-        scores.put(
-                "total",
-                totalScore
-        );
-
-        scores.put(
-                "emergencyMonths",
-                Math.round(
-                        emergencyMonths * 100.0
-                ) / 100.0
-        );
+        Map<String, Object> diagnosis =
+                diagnosisService.diagnose(
+                        scores
+                );
 
         //endregion
 
-        //region Save to Google Sheets
+
+        //region Guardar
 
         try {
 
@@ -214,12 +105,17 @@ public class NimboService {
                     monthlyInvestment,
                     debt,
                     emergencyFund,
-                    expensesScore,
-                    savingScore,
-                    investmentScore,
-                    emergencyScore,
-                    debtScore,
-                    totalScore
+                    ((Number) scores.get("expenses"))
+                            .doubleValue(),
+                    monthlySaving,
+                    ((Number) scores.get("investment"))
+                            .doubleValue(),
+                    ((Number) scores.get("emergency"))
+                            .doubleValue(),
+                    ((Number) scores.get("debt"))
+                            .doubleValue(),
+                    ((Number) scores.get("total"))
+                            .intValue()
             );
 
         } catch (IOException e) {
@@ -232,12 +128,19 @@ public class NimboService {
 
         //endregion
 
+
         return Map.of(
                 "ok",
                 true,
 
                 "id",
-                id
+                id,
+
+                "scores",
+                scores,
+
+                "diagnosis",
+                diagnosis
         );
     }
 
@@ -253,6 +156,7 @@ public class NimboService {
             Map<String, Object> diagnostic =
                     googleSheetsService.getDiagnostic(id);
 
+
             if (diagnostic == null) {
 
                 return Map.of(
@@ -263,6 +167,57 @@ public class NimboService {
                         "Diagnostic not found."
                 );
             }
+
+
+            double income =
+                    ((Number) diagnostic.get("income"))
+                            .doubleValue();
+
+
+            double expenses =
+                    ((Number) diagnostic.get("expenses"))
+                            .doubleValue();
+
+
+            double monthlyInvestment =
+                    ((Number) diagnostic.get("monthlyInvestment"))
+                            .doubleValue();
+
+
+            double debt =
+                    ((Number) diagnostic.get("debt"))
+                            .doubleValue();
+
+
+            double emergencyFund =
+                    ((Number) diagnostic.get("emergencyFund"))
+                            .doubleValue();
+
+
+            Map<String, Object> scores =
+                    scoresService.calculate(
+                            income,
+                            expenses,
+                            monthlyInvestment,
+                            debt,
+                            emergencyFund
+                    );
+
+            Map<String, Object> diagnosis =
+                    diagnosisService.diagnose(
+                            scores
+                    );
+
+
+            diagnostic.put(
+                    "scores",
+                    scores
+            );
+
+            diagnostic.put(
+                    "diagnosis",
+                    diagnosis
+            );
 
             return Map.of(
                     "ok",
@@ -289,14 +244,17 @@ public class NimboService {
             Object value) {
 
         if (value == null) {
+
             return 0;
         }
+
 
         if (value instanceof Number) {
 
             return ((Number) value)
                     .doubleValue();
         }
+
 
         try {
 
@@ -308,21 +266,6 @@ public class NimboService {
 
             return 0;
         }
-    }
-
-
-    private double clamp(
-            double value,
-            double min,
-            double max) {
-
-        return Math.max(
-                min,
-                Math.min(
-                        max,
-                        value
-                )
-        );
     }
 
     //endregion
