@@ -26,8 +26,8 @@ public class NimboService {
     }
 
     //region Create diagnostic
-
     public Map<String, Object> createDiagnostic(
+            String userId,
             Map<String, Object> data) {
 
         String id =
@@ -143,12 +143,11 @@ public class NimboService {
                 diagnosis
         );
     }
-
     //endregion
 
     //region Get diagnostic
-
     public Map<String, Object> getDiagnostic(
+            String userId,
             String id) {
 
         try {

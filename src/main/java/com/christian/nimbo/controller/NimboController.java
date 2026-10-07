@@ -4,6 +4,7 @@ import com.christian.nimbo.service.GoogleSheetsService;
 import com.christian.nimbo.service.NimboService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Map;
 
@@ -53,18 +54,36 @@ public class NimboController {
     @PostMapping("/api/diagnostics")
     @ResponseBody
     public Map<String, Object> createDiagnostic(
-            @RequestBody Map<String, Object> data) {
+            @RequestBody Map<String, Object> data,
+            HttpServletRequest request) {
 
-        return nimboService.createDiagnostic(data);
+        String userId =
+                (String) request.getAttribute(
+                        "userId"
+                );
+
+        return nimboService.createDiagnostic(
+                userId,
+                data
+        );
     }
 
 
     @GetMapping("/api/diagnostics/{id}")
     @ResponseBody
     public Map<String, Object> getDiagnostic(
-            @PathVariable String id) {
+            @PathVariable String id,
+            HttpServletRequest request) {
 
-        return nimboService.getDiagnostic(id);
+        String userId =
+                (String) request.getAttribute(
+                        "userId"
+                );
+
+        return nimboService.getDiagnostic(
+                userId,
+                id
+        );
     }
 
     //endregion

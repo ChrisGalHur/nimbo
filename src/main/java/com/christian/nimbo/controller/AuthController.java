@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Map;
 
 @Controller
@@ -22,6 +21,7 @@ public class AuthController {
     }
 
     //region Register
+
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> register(
@@ -49,22 +49,10 @@ public class AuthController {
                                     e.getMessage()
                             )
                     );
-
-        } catch (IOException e) {
-
-            return ResponseEntity
-                    .internalServerError()
-                    .body(
-                            Map.of(
-                                    "ok",
-                                    false,
-                                    "error",
-                                    "No se ha podido completar el registro."
-                            )
-                    );
         }
     }
     //endregion
+
 
     //region Login
     @PostMapping("/login")
@@ -91,19 +79,6 @@ public class AuthController {
                                     false,
                                     "error",
                                     e.getMessage()
-                            )
-                    );
-
-        } catch (IOException e) {
-
-            return ResponseEntity
-                    .internalServerError()
-                    .body(
-                            Map.of(
-                                    "ok",
-                                    false,
-                                    "error",
-                                    "No se ha podido iniciar sesión."
                             )
                     );
         }

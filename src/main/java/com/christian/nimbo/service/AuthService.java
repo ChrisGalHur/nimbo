@@ -1,34 +1,27 @@
 package com.christian.nimbo.service;
 
-import com.christian.nimbo.model.User;
+import com.christian.nimbo.repository.AuthRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class AuthService {
 
-    private final GoogleSheetsService googleSheetsService;
-    private final PasswordService passwordService;
+    private final AuthRepository authRepository;
 
     public AuthService(
-            GoogleSheetsService googleSheetsService,
-            PasswordService passwordService) {
+            AuthRepository authRepository) {
 
-        this.googleSheetsService =
-                googleSheetsService;
-
-        this.passwordService =
-                passwordService;
+        this.authRepository =
+                authRepository;
     }
 
     //region Register
     public Map<String, Object> register(
             String name,
             String email,
-            String password) throws IOException {
+            String password) {
 
         name = normalizeName(name);
         email = normalizeEmail(email);
@@ -39,33 +32,18 @@ public class AuthService {
                 password
         );
 
-        User existingUser =
-                googleSheetsService
-                        .findUserByEmail(email);
-
-        if (existingUser != null) {
-
-            throw new IllegalArgumentException(
-                    "Ya existe una cuenta con ese email."
-            );
-        }
-
-        User user =
-                new User(
-                        UUID.randomUUID().toString(),
-                        name,
+        Map<String, Object> response =
+                authRepository.register(
                         email,
-                        passwordService.hash(password),
-                        "BASIC"
+                        password,
+                        name
                 );
-
-        googleSheetsService.appendUser(user);
 
         return Map.of(
                 "ok",
                 true,
                 "user",
-                user.toPublicData()
+                response
         );
     }
     //endregion
@@ -73,7 +51,7 @@ public class AuthService {
     //region Login
     public Map<String, Object> login(
             String email,
-            String password) throws IOException {
+            String password) {
 
         email = normalizeEmail(email);
 
@@ -86,26 +64,41 @@ public class AuthService {
             );
         }
 
-        User user =
-                googleSheetsService
-                        .findUserByEmail(email);
-
-        if (user == null ||
-                !passwordService.matches(
-                        password,
-                        user.passwordHash()
-                )) {
-
-            throw new IllegalArgumentException(
-                    "Email o contraseña incorrectos."
-            );
-        }
+        Map<String, Object> response =
+                authRepository.login(
+                        email,
+                        password
+                );
 
         return Map.of(
                 "ok",
                 true,
                 "user",
-                user.toPublicData()
+                response.get("user"),
+                "access_token",
+                response.get("access_token"),
+                "refresh_token",
+                response.get("refresh_token"),
+                "expires_in",
+                response.get("expires_in")
+        );
+    }
+    //endregion
+
+    //region Validate token
+    public Map<String, Object> validateToken(
+            String accessToken) {
+
+        if (accessToken == null ||
+                accessToken.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "Access token is required."
+            );
+        }
+
+        return authRepository.validateToken(
+                accessToken
         );
     }
     //endregion
@@ -149,7 +142,6 @@ public class AuthService {
                 ? ""
                 : value.trim();
     }
-
 
     private String normalizeEmail(
             String value) {
