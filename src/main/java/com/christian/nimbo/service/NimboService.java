@@ -1,31 +1,35 @@
 package com.christian.nimbo.service;
 
+import com.christian.nimbo.repository.NimboRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class NimboService {
 
-    private final GoogleSheetsService googleSheetsService;
+    private final NimboRepository nimboRepository;
     private final ScoresService scoresService;
     private final DiagnosisService diagnosisService;
 
     public NimboService(
-            GoogleSheetsService googleSheetsService,
-            ScoresService scoresService, DiagnosisService diagnosisService) {
+            NimboRepository nimboRepository,
+            ScoresService scoresService,
+            DiagnosisService diagnosisService) {
 
-        this.googleSheetsService =
-                googleSheetsService;
+        this.nimboRepository =
+                nimboRepository;
 
         this.scoresService =
                 scoresService;
-        this.diagnosisService = diagnosisService;
+
+        this.diagnosisService =
+                diagnosisService;
     }
 
     //region Create diagnostic
+
     public Map<String, Object> createDiagnostic(
             String userId,
             Map<String, Object> data) {
@@ -33,38 +37,32 @@ public class NimboService {
         String id =
                 UUID.randomUUID().toString();
 
-
-        //region Obtener datos
+        //region Get input data
 
         double income =
                 toNumber(
                         data.get("income")
                 );
 
-
         double expenses =
                 toNumber(
                         data.get("expenses")
                 );
-
 
         double monthlySaving =
                 toNumber(
                         data.get("monthlySaving")
                 );
 
-
         double monthlyInvestment =
                 toNumber(
                         data.get("monthlyInvestment")
                 );
 
-
         double debt =
                 toNumber(
                         data.get("debt")
                 );
-
 
         double emergencyFund =
                 toNumber(
@@ -73,8 +71,7 @@ public class NimboService {
 
         //endregion
 
-
-        //region Calcular scores
+        //region Calculate scores
 
         Map<String, Object> scores =
                 scoresService.calculate(
@@ -92,42 +89,37 @@ public class NimboService {
 
         //endregion
 
+        //region Save public test snapshot
 
-        //region Guardar
+        Map<String, Object> snapshot =
+                Map.of(
+                        "id",
+                        id,
 
-        try {
+                        "income",
+                        income,
 
-            googleSheetsService.appendDiagnostic(
-                    id,
-                    income,
-                    expenses,
-                    monthlySaving,
-                    monthlyInvestment,
-                    debt,
-                    emergencyFund,
-                    ((Number) scores.get("expenses"))
-                            .doubleValue(),
-                    monthlySaving,
-                    ((Number) scores.get("investment"))
-                            .doubleValue(),
-                    ((Number) scores.get("emergency"))
-                            .doubleValue(),
-                    ((Number) scores.get("debt"))
-                            .doubleValue(),
-                    ((Number) scores.get("total"))
-                            .intValue()
-            );
+                        "expenses",
+                        expenses,
 
-        } catch (IOException e) {
+                        "monthly_saving",
+                        monthlySaving,
 
-            throw new RuntimeException(
-                    "Failed to save diagnostic to Google Sheets.",
-                    e
-            );
-        }
+                        "monthly_investment",
+                        monthlyInvestment,
+
+                        "debt",
+                        debt,
+
+                        "emergency_fund",
+                        emergencyFund
+                );
+
+        nimboRepository.savePublicTestSnapshot(
+                snapshot
+        );
 
         //endregion
-
 
         return Map.of(
                 "ok",
@@ -143,96 +135,91 @@ public class NimboService {
                 diagnosis
         );
     }
+
     //endregion
 
     //region Get diagnostic
+
     public Map<String, Object> getDiagnostic(
             String userId,
             String id) {
 
-        try {
-
-            Map<String, Object> diagnostic =
-                    googleSheetsService.getDiagnostic(id);
-
-
-            if (diagnostic == null) {
-
-                return Map.of(
-                        "ok",
-                        false,
-
-                        "error",
-                        "Diagnostic not found."
+        Map<String, Object> diagnostic =
+                nimboRepository.findPublicTestSnapshotById(
+                        id
                 );
-            }
 
-
-            double income =
-                    ((Number) diagnostic.get("income"))
-                            .doubleValue();
-
-
-            double expenses =
-                    ((Number) diagnostic.get("expenses"))
-                            .doubleValue();
-
-
-            double monthlyInvestment =
-                    ((Number) diagnostic.get("monthlyInvestment"))
-                            .doubleValue();
-
-
-            double debt =
-                    ((Number) diagnostic.get("debt"))
-                            .doubleValue();
-
-
-            double emergencyFund =
-                    ((Number) diagnostic.get("emergencyFund"))
-                            .doubleValue();
-
-
-            Map<String, Object> scores =
-                    scoresService.calculate(
-                            income,
-                            expenses,
-                            monthlyInvestment,
-                            debt,
-                            emergencyFund
-                    );
-
-            Map<String, Object> diagnosis =
-                    diagnosisService.diagnose(
-                            scores
-                    );
-
-
-            diagnostic.put(
-                    "scores",
-                    scores
-            );
-
-            diagnostic.put(
-                    "diagnosis",
-                    diagnosis
-            );
+        if (diagnostic == null) {
 
             return Map.of(
                     "ok",
-                    true,
+                    false,
 
-                    "data",
-                    diagnostic
-            );
-
-        } catch (IOException e) {
-
-            throw new RuntimeException(
-                    "Failed to read diagnostic from Google Sheets.",
-                    e
+                    "error",
+                    "Diagnostic not found."
             );
         }
+
+        double income =
+                toNumber(
+                        diagnostic.get("income")
+                );
+
+        double expenses =
+                toNumber(
+                        diagnostic.get("expenses")
+                );
+
+        double monthlyInvestment =
+                toNumber(
+                        diagnostic.get("monthly_investment")
+                );
+
+        double debt =
+                toNumber(
+                        diagnostic.get("debt")
+                );
+
+        double emergencyFund =
+                toNumber(
+                        diagnostic.get("emergency_fund")
+                );
+
+        //region Calculate scores
+
+        Map<String, Object> scores =
+                scoresService.calculate(
+                        income,
+                        expenses,
+                        monthlyInvestment,
+                        debt,
+                        emergencyFund
+                );
+
+        Map<String, Object> diagnosis =
+                diagnosisService.diagnose(
+                        scores
+                );
+
+        //endregion
+
+        diagnostic.put(
+                "scores",
+                scores
+        );
+
+        diagnostic.put(
+                "diagnosis",
+                diagnosis
+        );
+
+        return Map.of(
+                "ok",
+                true,
+
+                "data",
+                diagnostic
+        );
     }
 
     //endregion
@@ -243,17 +230,12 @@ public class NimboService {
             Object value) {
 
         if (value == null) {
-
             return 0;
         }
 
-
         if (value instanceof Number) {
-
-            return ((Number) value)
-                    .doubleValue();
+            return ((Number) value).doubleValue();
         }
-
 
         try {
 

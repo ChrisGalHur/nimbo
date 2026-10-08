@@ -1,6 +1,5 @@
 package com.christian.nimbo.controller;
 
-import com.christian.nimbo.service.GoogleSheetsService;
 import com.christian.nimbo.service.NimboService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -12,33 +11,11 @@ import java.util.Map;
 public class NimboController {
 
     private final NimboService nimboService;
-    private final GoogleSheetsService googleSheetsService;
 
-    public NimboController(
-            NimboService nimboService,
-            GoogleSheetsService googleSheetsService) {
+    public NimboController(NimboService nimboService) {
 
         this.nimboService = nimboService;
-        this.googleSheetsService = googleSheetsService;
     }
-
-    //region Google Sheets test
-    @GetMapping("/api/sheets/test")
-    @ResponseBody
-    public String testGoogleSheets() {
-
-        try {
-            return googleSheetsService.readSheet();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return "Google Sheets error: " +
-                    e.getMessage();
-        }
-    }
-    //endregion
-
 
     //region Health
     @GetMapping("/api/health")

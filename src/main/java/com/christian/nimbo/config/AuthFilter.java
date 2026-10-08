@@ -34,7 +34,7 @@ public class AuthFilter extends OncePerRequestFilter {
         return path.equals("/api/auth/login") ||
                 path.equals("/api/auth/register") ||
                 path.equals("/api/health") ||
-                path.equals("/api/sheets/test") ||
+                path.startsWith("/api/diagnostics") ||
                 request.getMethod().equalsIgnoreCase("OPTIONS");
     }
     //endregion
