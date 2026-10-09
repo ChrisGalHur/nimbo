@@ -53,6 +53,35 @@ public class AuthController {
     }
     //endregion
 
+    //region Forgot password
+    @PostMapping("/forgot-password")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> forgotPassword(
+            @RequestBody Map<String, String> data) {
+
+        try {
+
+            return ResponseEntity.ok(
+                    authService.forgotPassword(
+                            data.get("email")
+                    )
+            );
+
+        } catch (IllegalArgumentException e) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(
+                            Map.of(
+                                    "ok",
+                                    false,
+                                    "error",
+                                    e.getMessage()
+                            )
+                    );
+        }
+    }
+    //endregion
 
     //region Login
     @PostMapping("/login")

@@ -15,17 +15,19 @@ import java.util.Map;
 public class SupabaseAuthRepository implements AuthRepository {
 
     private final RestClient restClient;
-
     private final String redirectUrl;
+    private final String passwordResetRedirectUrl;
 
+
+    //region Constructor
     public SupabaseAuthRepository(
             @Value("${supabase.url}") String supabaseUrl,
             @Value("${supabase.key}") String supabaseKey,
-            @Value("${supabase.redirect-url}") String redirectUrl) {
+            @Value("${supabase.redirect-url}") String redirectUrl,
+            @Value("${supabase.password-reset-redirect-url}") String passwordResetRedirectUrl) {
 
-        this.redirectUrl =
-                redirectUrl;
-
+        this.redirectUrl = redirectUrl;
+        this.passwordResetRedirectUrl = passwordResetRedirectUrl;
         this.restClient =
                 RestClient.builder()
                         .baseUrl(supabaseUrl)
@@ -39,10 +41,9 @@ public class SupabaseAuthRepository implements AuthRepository {
                         )
                         .build();
     }
-
+    //endregion
 
     //region Register
-
     @Override
     public Map<String, Object> register(
             String email,
@@ -165,6 +166,54 @@ public class SupabaseAuthRepository implements AuthRepository {
 
             throw new IllegalArgumentException(
                     "No se ha podido iniciar sesión. Inténtalo de nuevo."
+            );
+        }
+    }
+    //endregion
+
+    //region Forgot password
+
+    @Override
+    public void forgotPassword(
+            String email) {
+
+        try {
+
+            restClient
+                    .post()
+                    .uri(uriBuilder ->
+                            uriBuilder
+                                    .path("/auth/v1/recover")
+                                    .queryParam(
+                                            "redirect_to",
+                                            passwordResetRedirectUrl
+                                    )
+                                    .build()
+                    )
+                    .body(
+                            Map.of(
+                                    "email",
+                                    email
+                            )
+                    )
+                    .retrieve()
+                    .toBodilessEntity();
+
+        } catch (org.springframework.web.client.RestClientResponseException e) {
+
+            // Log the actual Supabase response for debugging.
+            System.err.println(
+                    "Supabase password recovery failed. HTTP status: "
+                            + e.getStatusCode()
+            );
+
+            System.err.println(
+                    "Supabase response: "
+                            + e.getResponseBodyAsString()
+            );
+
+            throw new IllegalArgumentException(
+                    "No se ha podido enviar el enlace. Inténtalo de nuevo en unos minutos."
             );
         }
     }

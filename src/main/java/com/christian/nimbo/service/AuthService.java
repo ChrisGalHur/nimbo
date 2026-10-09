@@ -85,6 +85,29 @@ public class AuthService {
     }
     //endregion
 
+    //region Forgot password
+    public Map<String, Object> forgotPassword(
+            String email) {
+
+        email = normalizeEmail(email);
+
+        if (email.isBlank() ||
+                !email.contains("@")) {
+
+            throw new IllegalArgumentException(
+                    "Introduce un email válido."
+            );
+        }
+
+        authRepository.forgotPassword(email);
+
+        return Map.of(
+                "ok",
+                true
+        );
+    }
+    //endregion
+
     //region Validate token
     public Map<String, Object> validateToken(
             String accessToken) {

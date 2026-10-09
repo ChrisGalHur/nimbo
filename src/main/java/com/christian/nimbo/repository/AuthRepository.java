@@ -19,6 +19,12 @@ public interface AuthRepository {
     );
     //endregion
 
+    //region Forgot password
+    void forgotPassword(
+            String email
+    );
+    //endregion
+
     //region Validate token
     Map<String, Object> validateToken(
             String accessToken
