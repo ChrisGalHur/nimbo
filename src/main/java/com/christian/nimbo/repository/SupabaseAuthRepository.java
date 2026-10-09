@@ -57,25 +57,14 @@ public class SupabaseAuthRepository implements AuthRepository {
                     .uri("/auth/v1/signup")
                     .body(
                             Map.of(
-                                    "email",
-                                    email,
-
-                                    "password",
-                                    password,
-
-                                    "data",
-                                    Map.of(
-                                            "name",
-                                            name
-                                    ),
-
-                                    "options",
-                                    Map.of(
-                                            "email_redirect_to",
-                                            redirectUrl
-                                    )
-                            )
-                    )
+                                    "email", email,
+                                    "password", password,
+                                    "data", Map.of(
+                                            "name", name
+                                                ),
+                                    "options", Map.of(
+                                            "emailRedirectTo", redirectUrl)
+                            ))
                     .retrieve()
                     .body(Map.class);
 
@@ -200,17 +189,6 @@ public class SupabaseAuthRepository implements AuthRepository {
                     .toBodilessEntity();
 
         } catch (org.springframework.web.client.RestClientResponseException e) {
-
-            // Log the actual Supabase response for debugging.
-            System.err.println(
-                    "Supabase password recovery failed. HTTP status: "
-                            + e.getStatusCode()
-            );
-
-            System.err.println(
-                    "Supabase response: "
-                            + e.getResponseBodyAsString()
-            );
 
             throw new IllegalArgumentException(
                     "No se ha podido enviar el enlace. Inténtalo de nuevo en unos minutos."
