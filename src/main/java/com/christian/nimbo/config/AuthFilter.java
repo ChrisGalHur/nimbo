@@ -40,7 +40,8 @@ public class AuthFilter extends OncePerRequestFilter {
     }
     //endregion
 
-    //region Filter
+
+    //region Authenticate requests
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -48,57 +49,45 @@ public class AuthFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authorization =
-                request.getHeader("Authorization");
+        String authorization = request.getHeader("Authorization");
 
         if (authorization == null ||
                 !authorization.startsWith("Bearer ")) {
-
-            response.setStatus(
-                    HttpServletResponse.SC_UNAUTHORIZED
-            );
-
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        String accessToken =
-                authorization.substring(7);
+        String accessToken = authorization.substring(7);
 
         if (accessToken.isBlank()) {
-
-            response.setStatus(
-                    HttpServletResponse.SC_UNAUTHORIZED
-            );
-
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
+        Map<String, Object> user;
+
         try {
-
-            Map<String, Object> user =
-                    authService.validateToken(
-                            accessToken
-                    );
-
-            String userId =
-                    (String) user.get("id");
-
-            request.setAttribute(
-                    "userId",
-                    userId
-            );
-
-            filterChain.doFilter(
-                    request,
-                    response
-            );
-
-        } catch (Exception e) {
-
-            response.setStatus(
-                    HttpServletResponse.SC_UNAUTHORIZED
-            );
+            user = authService.validateToken(accessToken);
+        } catch (Exception exception) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
+
+        if (user == null || user.get("id") == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        String userId = user.get("id").toString();
+
+        if (userId.isBlank()) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        request.setAttribute("userId", userId);
+
+        filterChain.doFilter(request, response);
     }
-    //endregion
+    //endregion Authenticate requests
 }

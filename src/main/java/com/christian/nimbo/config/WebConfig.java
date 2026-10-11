@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+
     //region CORS
 
     @Override
@@ -22,9 +23,14 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods(
                         "GET",
                         "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
                         "OPTIONS"
                 )
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
     }
 
     //endregion

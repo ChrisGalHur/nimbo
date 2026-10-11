@@ -1,5 +1,6 @@
-package com.christian.nimbo.repository;
+package com.christian.nimbo.repository.supabase;
 
+import com.christian.nimbo.repository.AuthRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
