@@ -113,4 +113,9 @@ public class AuthController {
         }
     }
     //endregion
+
+    @GetMapping("/me")
+    public ResponseEntity<Void> me() {
+        return ResponseEntity.ok().build();
+    }
 }
